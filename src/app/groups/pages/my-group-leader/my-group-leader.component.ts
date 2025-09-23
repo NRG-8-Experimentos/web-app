@@ -8,7 +8,7 @@ import {GroupDisplayComponent} from '../../components/group-display/group-displa
   ],
   template: `
     <div class="h-full w-full">
-      <h1 class="text-2xl font-bold">Grupo</h1>
+
       <app-group-display/>
     </div>
   `,
