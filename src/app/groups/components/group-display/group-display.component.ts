@@ -4,16 +4,17 @@ import { Component } from '@angular/core';
   selector: 'app-group-display',
   imports: [],
   template: `
-    <div class="h-full">
+    <div class="h-full flex flex-col items-center justify-center ">
 
-      <div class="rounded-3xl max-w-2xl max-h-96 text-white font-bold text-2xl bg-[#1A4E85]">
-         <div class="flex flex-col items-center justify-center p-20 space-y-4">
+      <div class="rounded-3xl max-w-2xl max-h-96 text-white font-bold text-2xl bg-[#1A4E85] shadow-lg shadow-gray-400">
+         <div class="flex flex-col items-center justify-between p-20 gap-16">
            <p>
              No haz creado tu grupo todavia
            </p>
-           <div class="bg-[#4A90E2] rounded-2xl p-20">
+           <button (click)="goToCreateGroupo()"
+                   class="bg-[#4A90E2] rounded-2xl py-2 px-6 shadow-md shadow-gray-800 hover:cursor-pointer hover:bg-[#559df2] transition">
              Crear Grupo
-           </div>
+           </button>
          </div>
       </div>
     </div>
@@ -25,5 +26,9 @@ export class GroupDisplayComponent {
   groupCode = "345D76SF7";
   groupDescription = "\"Los Backyardigans\" es un equipo de trabajo cohesionado y multifuncional, especializado en soluciones logísticas, desarrollo de proyectos creativos y análisis de datos.";
 
+
+  goToCreateGroupo() {
+    console.log("crear grupo");
+  }
 
 }
