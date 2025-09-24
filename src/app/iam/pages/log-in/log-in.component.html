@@ -18,7 +18,7 @@
             <mat-label>Usuario</mat-label>
             <mat-icon matPrefix style="color: #888;">person</mat-icon>
             <input matInput formControlName="username" placeholder="Usuario" type="text"required>
-            <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            <mat-error *ngIf="loginForm.get('username')?.hasError">
               El usuario es <strong>requerido</strong>
             </mat-error>
           </mat-form-field>
@@ -26,7 +26,7 @@
             <mat-label>Contraseña</mat-label>
             <mat-icon matPrefix style="color: #888;">lock</mat-icon>
             <input matInput formControlName="password" placeholder="Contraseña" type="password" required>
-            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            <mat-error *ngIf="loginForm.get('password')?.hasError">
               La contraseña es <strong>requerida</strong>
             </mat-error>
           </mat-form-field>

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {LogInComponent} from './iam/pages/log-in.component/log-in.component';
+import {LogInComponent} from '@app/iam/pages/log-in/log-in.component';
 import {SignUpComponent} from './iam/pages/sign-up/sign-up.component';
 import {MainMemberComponent} from './shared/pages/main-member/main-member.component';
 import {MainLeaderComponent} from './shared/pages/main-leader/main-leader.component';
@@ -15,6 +15,7 @@ import {MyGroupMemberComponent} from './groups/pages/my-group-member/my-group-me
 import {TasksMemberComponent} from './tasks/pages/tasks-member/tasks-member.component';
 import {RequestsMemberComponent} from './requests/pages/requests-member/requests-member.component';
 import {AnalyticsMemberComponent} from './analytics/pages/analytics-member/analytics-member.component';
+import {CreateGroupComponent} from '@app/groups/pages/create-group/create-group.component';
 
 export const routes: Routes = [
   {path: '', component: MainComponent, canActivate:[authGuard]},
@@ -22,11 +23,13 @@ export const routes: Routes = [
   { path: 'sign-up', component: SignUpComponent },
   { path: 'members/main', component: MainMemberComponent },
   { path: 'leaders/main', component: MainLeaderComponent },
+  { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group', component: MyGroupLeaderComponent },
   { path: 'leaders/my-group/members', component: MembersLeaderComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
   { path: 'leaders/my-group/tasks', component: TasksLeaderComponent },
+
   { path: 'leaders/my-group/analytics', component: AnalyticsLeaderComponent },
   { path: 'members/my-group', component: MyGroupMemberComponent },
   { path: 'members/my-group/tasks', component: TasksMemberComponent },
