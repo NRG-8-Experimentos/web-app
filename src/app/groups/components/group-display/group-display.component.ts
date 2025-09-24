@@ -3,12 +3,14 @@ import {NoGroupDisplayComponent} from '../no-group-display/no-group-display.comp
 import {
   ProfileImageDisplayComponent
 } from '@app/shared/components/profile-image-display/profile-image-display.component';
-//src="assets/images/group.jpg"
+import {MatIconModule} from '@angular/material/icon';
+
 @Component({
   selector: 'app-group-display',
   imports: [
     NoGroupDisplayComponent,
-    ProfileImageDisplayComponent
+    ProfileImageDisplayComponent,
+    MatIconModule
   ],
   template: `
     <div class="w-full h-full">
@@ -32,9 +34,32 @@ import {
           </div>
           <div class="h-full flex flex-col gap-7">
             <h2 class="text-2xl font-bold">Miembros</h2>
-            <div class="flex-1 w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-xl ">
-              Tu grupo no tiene integrantes, brindale el código a tus compañeros de proyecto para poder unirse al grupo
-            </div>
+            @if (members.length > 0) {
+              <div class="flex-1  rounded-3xl bg-[#F4F4F4] p-8 text-black text-center text-xl ">
+                <div class="bg-white rounded-2xl h-full">
+                  <div class="flex flex-col p-4 gap-4 h-full ">
+
+                    @for (member of members; track member.id) {
+                      <div class="flex justify-between items-center">
+                        <div class="inline mb-4 md:mb-0 md:flex items-center ">
+                          <img [src]="member.imgSrc" [alt]="member.name"
+                               class="aspect-square rounded-full w-13 object-cover shadow-md shadow-gray-800 mr-4" />
+                          <h3 class="text-md font-medium"> {{ member.name }} </h3>
+                        </div>
+                        <button class="bg-gray-300 flex items-center px-1 py-2 rounded hover:bg-red-400">
+                          <mat-icon aria-hidden="false" aria-label="delete" fontIcon="delete" />
+                        </button>
+                      </div>
+                    }
+
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <div class="flex-1 w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-xl ">
+                Tu grupo no tiene integrantes, brindale el código a tus compañeros de proyecto para poder unirse al grupo
+              </div>
+            }
           </div>
         </div>
       } @else {
@@ -52,4 +77,21 @@ export class GroupDisplayComponent {
 
   hasGroup = true;
 
+  members = [
+    {
+      id: 1,
+      name: 'Alicia Becker',
+      imgSrc: 'assets/images/default-img.webp',
+    },
+    {
+      id: 2,
+      name: 'Juan Sideral Carrion',
+      imgSrc: 'assets/images/default-img.webp',
+    },
+    {
+      id: 3,
+      name: 'Jose Carlos',
+      imgSrc: 'assets/images/default-img.webp',
+    }
+  ] ;
 }
