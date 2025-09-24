@@ -5,6 +5,7 @@ import {BehaviorSubject} from 'rxjs';
 import { Router } from '@angular/router';
 import {SignInRequest} from "../model/requests/sign-in.request";
 import {SignInResponse} from "../model/responses/sign-in.response";
+import {SignUpRequest} from '../model/requests/sign-up.request';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,19 @@ export class AuthService {
 
   get currentUserType() {
     return this.signedInUserType.asObservable();
+  }
+
+  signUp(signUpRequest: SignUpRequest) {
+    return this.http.post(`${this.basePath}/authentication/sign-up`, signUpRequest, this.httpOptions)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/sign-in']).then();
+        },
+        error: (error) => {
+          console.error(`Error while signing up: ${error}`);
+          this.router.navigate(['/sign-up']).then();
+        }
+      });
   }
 
   /**
