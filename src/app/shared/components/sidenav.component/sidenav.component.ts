@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostListener, inject, Input, OnInit, Output} from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass} from '@angular/common';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {trigger, transition, style, animate} from '@angular/animations';
 import {DetailsService} from '../../services/details.service';
@@ -16,9 +16,7 @@ interface SideNavToggle{
 @Component({
   selector: 'app-sidenav',
   imports: [
-    NgForOf,
     RouterLink,
-    NgIf,
     NgClass,
     RouterLinkActive
   ],
