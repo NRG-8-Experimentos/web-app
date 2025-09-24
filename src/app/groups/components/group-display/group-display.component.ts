@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import {NoGroupDisplayComponent} from '../no-group-display/no-group-display.component';
-
+import {
+  ProfileImageDisplayComponent
+} from '@app/shared/components/profile-image-display/profile-image-display.component';
+//src="assets/images/group.jpg"
 @Component({
   selector: 'app-group-display',
   imports: [
-    NoGroupDisplayComponent
+    NoGroupDisplayComponent,
+    ProfileImageDisplayComponent
   ],
   template: `
     <div class="w-full h-full">
@@ -13,12 +17,7 @@ import {NoGroupDisplayComponent} from '../no-group-display/no-group-display.comp
           <div class="w-full h-full flex flex-col gap-7">
             <h2 class="text-2xl font-bold">Grupo</h2>
 
-            <div class="flex">
-              <div class="max-w-md flex items-center justify-between gap-6">
-                <img src="assets/images/group.jpg" alt="Group Picture" class="w-36 h-36 rounded-full object-cover shadow-md shadow-gray-800"/>
-                <h3 class="text-2xl font-medium"> {{ groupName }}</h3>
-              </div>
-            </div>
+            <app-profile-image-display [groupName]="groupName" alt="Imagen del grupo" imgSrc="assets/images/group.jpg"/>
 
             <div class="text-white flex justify-center items-center">
               <div class="bg-[#4A90E2] rounded-2xl py-2 px-6 text-xl">
@@ -26,14 +25,14 @@ import {NoGroupDisplayComponent} from '../no-group-display/no-group-display.comp
               </div>
             </div>
             <div class="w-full flex-1">
-              <div class="w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-2xl flex items-center">
+              <div class="w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-xl flex items-center">
                 {{ groupDescription }}
               </div>
             </div>
           </div>
           <div class="h-full flex flex-col gap-7">
             <h2 class="text-2xl font-bold">Miembros</h2>
-            <div class="flex-1 w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-2xl ">
+            <div class="flex-1 w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-xl ">
               Tu grupo no tiene integrantes, brindale el código a tus compañeros de proyecto para poder unirse al grupo
             </div>
           </div>

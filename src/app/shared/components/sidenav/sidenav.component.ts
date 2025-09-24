@@ -5,7 +5,7 @@ import {trigger, transition, style, animate} from '@angular/animations';
 import {DetailsService} from '../../services/details.service';
 import {Leader} from '../../model/leader.entity';
 import {Member} from '../../model/member.entity';
-import {LOGOUT_OPTION} from '../../../app';
+import {LOGOUT_OPTION} from '@app/app';
 import {DomSanitizer} from '@angular/platform-browser';
 
 interface SideNavToggle{
