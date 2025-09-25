@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-main-member',
@@ -6,6 +6,5 @@ import { Component } from '@angular/core';
   templateUrl: './main-member.component.html',
   styleUrl: './main-member.component.css'
 })
-export class MainMemberComponent {
-
+export class MainMemberComponent{
 }

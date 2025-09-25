@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {catchError, Observable, retry} from 'rxjs';
 import {BaseApiService} from './base-api.service';
 import {Member} from '../model/member.entity';
+import {Group} from '../../groups/model/group.entity';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,14 @@ export class DetailsService extends BaseApiService<Leader>{
 
   getLeaderDetails(): Observable<Leader> {
     return this.http.get<Leader>(`${this.resourcePath()}/leader/details`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      );
+  }
+
+  getMemberGroup(): Observable<Group>{
+    return this.http.get<Group>(`${this.resourcePath()}/member/group`, this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)
