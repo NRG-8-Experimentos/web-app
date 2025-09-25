@@ -8,6 +8,37 @@
   align-items: center;
   justify-content: center;
 
+  .invitation-active-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+
+    .accept-button{
+      color: white;
+      font-size: 16px;
+      background-color: #FF9800;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .decline-button{
+      color: white;
+      font-size: 16px;
+      background-color: #E94F37;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+  }
+
   .search-container{
     display: flex;
     flex-direction: column;
@@ -104,6 +135,12 @@
     }
 
     .group-found-button-container{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+
       .join-button{
         color: white;
         font-size: 16px;

@@ -1,11 +1,28 @@
 <div class="invitations-screen">
   @if(activeInvitation){
-    <div class="invitation-active">
-      <p>¡Tienes una invitación activa para unirte al grupo <strong>"{{activeInvitation.group.name}}"</strong>!</p>
-      <p>¿Deseas aceptar la invitación?</p>
-      <div class="invitation-buttons">
-        <button class="accept-button" (click)="onCheckInvitation()">Revisar estado de la invitación</button>
-        <button class="decline-button" (click)="onDeclineInvitation()">Rechazar</button>
+    <div class="invitation-active-container">
+      <div style="font-size: 24px; font-weight: bold; margin-bottom: 20px; text-align: center;">
+        <p>¡Tienes una invitación activa para unirte al grupo <strong>"{{activeInvitation.group.name}}"</strong></p>
+      </div>
+      <div class="group-container-found">
+        <div class="group-found-header">
+          <img [src]="activeInvitation.group.imgUrl || 'assets/default-group-image.png'" alt="Grupo {{ activeInvitation.group.name }}" class="group-image">
+          <p>{{activeInvitation.group.name}}</p>
+        </div>
+        <div style="border-top: 2px solid #fff; width: 100%;"></div>
+        <div class="group-found-body">
+          <p>Descripción: {{
+              activeInvitation.group.description.length > 500
+                ? (activeInvitation.group.description.slice(0, 500) + '...')
+                : activeInvitation.group.description
+            }}</p>
+          <p>Cantidad de miembros: {{activeInvitation.group.memberCount}}</p>
+          <p>Código: {{activeInvitation.group.code}}</p>
+        </div>
+        <div class="group-found-button-container">
+          <button class="accept-button" (click)="onCheckInvitation()">Revisar estado de la solicitud</button>
+          <button class="decline-button" (click)="onDeclineInvitation()">Cancelar solicitud</button>
+        </div>
       </div>
     </div>
   } @else {
