@@ -19,6 +19,4 @@ export class GroupsApiService extends BaseApiService<Group>{
     };
     return this.http.get<Group>(`${this.resourcePath()}/search`, options);
   }
-
-
 }

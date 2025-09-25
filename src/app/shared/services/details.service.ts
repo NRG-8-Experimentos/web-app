@@ -39,4 +39,14 @@ export class DetailsService extends BaseApiService<Leader>{
         catchError(this.handleError)
       );
   }
+
+  acceptOrDeclineInvitation(invitationId: number, accept: boolean): Observable<void> {
+    const url = `${this.resourcePath()}/group/invitations/${invitationId}?accept=${accept}`;
+    return this.http.patch<void>(url, {}, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      );
+  }
+
 }
