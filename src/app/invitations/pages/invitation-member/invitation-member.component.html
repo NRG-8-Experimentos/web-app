@@ -21,11 +21,12 @@
         </div>
         <div class="group-found-button-container">
           <button class="accept-button" (click)="onCheckInvitation()">Revisar estado de la solicitud</button>
-          <button class="decline-button" (click)="onDeclineInvitation()">Cancelar solicitud</button>
+          <button class="decline-button" (click)="onCancelInvitation()">Cancelar solicitud</button>
         </div>
       </div>
     </div>
-  } @else {
+  }
+  @if (activeInvitation == null) {
     <div class="search-container">
       <div class="search-title">
         <p>Únete a un grupo</p>

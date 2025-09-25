@@ -7,6 +7,8 @@ import {InvitationsApiService} from '../../services/invitations-api.service';
 import {GroupsApiService} from '../../../groups/services/groups-api.service';
 import {Group} from '../../../groups/model/group.entity';
 import {Invitation} from '../../model/invitation.entity';
+import {DetailsService} from '../../../shared/services/details.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-invitation-member',
@@ -26,7 +28,9 @@ export class InvitationMemberComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private invitationsApi: InvitationsApiService,
-    private groupsApi: GroupsApiService
+    private groupsApi: GroupsApiService,
+    private detailsService: DetailsService,
+    private router: Router
     ) {
     this.searchForm = this.fb.group({
       query: ['']
@@ -37,13 +41,21 @@ export class InvitationMemberComponent implements OnInit {
   activeInvitation: Invitation | null = null;
 
   ngOnInit(): void {
-    console.clear();
+    this.checkActiveInvitation()
+    console.clear()
+  }
+
+  checkActiveInvitation(): void {
     this.invitationsApi.getInvitationsByMember().subscribe({
       next: (invitation) => {
         console.log('Invitacion activa', invitation);
         this.activeInvitation = invitation || null;
+      },
+      error: (err) => {
+        this.activeInvitation = null;
       }
     });
+    console.clear();
   }
 
   onSearch(): void {
@@ -65,14 +77,39 @@ export class InvitationMemberComponent implements OnInit {
   }
 
   onJoinGroup(): void{
-
+    this.invitationsApi.sendInvitation(this.groupFound?.id).subscribe({
+      next: () => {
+        this.checkActiveInvitation()// Actualiza la invitación activa
+        console.clear();
+      },
+      error: (err) => {
+        console.error('Error al enviar invitación:', err);
+      }
+    });
   }
 
-  onDeclineInvitation() {
-
+  onCancelInvitation() {
+    this.invitationsApi.cancelInvitation().subscribe({
+      next: () => {
+        this.activeInvitation =  null
+        console.clear();
+      },
+      error: (err) => {
+        console.error('Error al cancelar invitación:', err);
+      }
+    });
   }
+
 
   onCheckInvitation() {
-
+    this.detailsService.getMemberGroup().subscribe({
+      next: () => {
+        this.router.navigate(['/members/main']);
+      },
+      error: (err) => {
+        this.checkActiveInvitation();
+        console.error('Error al consultar el grupo:', err);
+      }
+    });
   }
 }
