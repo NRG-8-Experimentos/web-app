@@ -32,4 +32,11 @@ export class InvitationsApiService extends BaseApiService<Invitation>{
       catchError(this.handleError)
     );
   }
+
+  fetchGroupInvitations(): Observable<Invitation[]>{
+    return this.http.get<Invitation[]>(`${this.resourcePath()}/group`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
 }

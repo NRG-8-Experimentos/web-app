@@ -1,0 +1,13 @@
+<div>
+  @if (invitations.length === 0) {
+    <p class="no-invitations-message">No tienes invitaciones pendientes.</p>
+  }
+  @if (invitations.length > 0) {
+    @for (invitation of invitations; track invitation.id) {
+      <app-invitation
+        [invitation]="invitation"
+        class="invitation-card"
+      ></app-invitation>
+    }
+  }
+</div>
