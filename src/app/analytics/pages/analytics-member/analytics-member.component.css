@@ -48,6 +48,12 @@
   font-size: 14px;
 }
 
+.profile-email {
+  color: #888;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
 .metrics-scroll {
   display: flex;
   overflow-x: auto;
