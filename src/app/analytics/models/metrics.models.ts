@@ -1,35 +1,21 @@
-export interface TaskTimePassedResource {
-  memberId: number;
-  avgTimePassedMillis: number;
-}
-
-export interface AvgCompletionTimeResource {
+export interface TaskOverviewResource {
   type: string;
-  avgDays: number;
-  details: { [key: string]: number };
-}
-
-export interface RescheduledTasksResource {
-  type: string;
-  totalRescheduled: number;
-  details: { [key: string]: number };
-  rescheduledMemberIds: number[];
-}
-
-export interface MemberTaskInfo {
-  memberName: string;
-  taskCount: number;
-  imgUrl?: string;
+  totalTasks: number;
+  details: { [status: string]: number }; // Ejemplo: { COMPLETED: 5, DONE: 3, ... }
 }
 
 export interface TaskDistributionResource {
   type: string;
   totalTasks: number;
-  details: { [memberId: string]: MemberTaskInfo };
+  tasks: Array<{ title: string }>; // Lista de tareas, ajusta según la respuesta real
 }
 
-export interface TaskOverviewResource {
+export interface RescheduledTasksResource {
   type: string;
-  totalTasks: number;
-  overview: { [status: string]: number };
+  value: number; // Cantidad total de tareas reprogramadas
+}
+
+export interface AvgCompletionTimeResource {
+  type: string;
+  value: number; // Promedio en días (o ajusta según la respuesta real)
 }
