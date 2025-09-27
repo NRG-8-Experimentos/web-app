@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {AnalyticsLeaderComponent} from '../../components/analytics-leader/analytics-leader.component';
 
-import { AnalyticsLeaderComponent } from './analytics-leader.component';
 
 describe('AnalyticsLeaderComponent', () => {
   let component: AnalyticsLeaderComponent;
