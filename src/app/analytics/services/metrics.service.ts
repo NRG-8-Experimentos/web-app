@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, retry, catchError } from 'rxjs';
+import { BaseApiService } from '../../shared/services/base-api.service';
 import {
   TaskTimePassedResource,
   AvgCompletionTimeResource,
@@ -12,81 +12,72 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class MetricsService {
-  private readonly baseUrl = '/api/v1/metrics'; // Verifica que este endpoint exista en el backend
-
-  constructor(private http: HttpClient) {}
-
-  private getAuthHeaders(token: string): HttpHeaders {
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+export class MetricsService extends BaseApiService<any> {
+  constructor() {
+    super();
+    this.resourceEndPoint = '/metrics';
   }
 
-  getAverageTaskTimePassed(memberId: number, token: string): Observable<TaskTimePassedResource> {
-    return this.http.get<TaskTimePassedResource>(
-      `${this.baseUrl}/task/member/${memberId}/time-passed`,
-      { headers: this.getAuthHeaders(token) }
+  getAverageTaskTimePassed(memberId: number): Observable<TaskTimePassedResource> {
+    return this.http.get<TaskTimePassedResource>(`${this.resourcePath()}/task/member/${memberId}/time-passed`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getTaskOverview(token: string): Observable<TaskOverviewResource> {
-    console.log('GET', `${this.baseUrl}/tasks/overview`);
-    return this.http.get<TaskOverviewResource>(
-      `${this.baseUrl}/tasks/overview`,
-      { headers: this.getAuthHeaders(token) }
+  getTaskOverview(): Observable<TaskOverviewResource> {
+    return this.http.get<TaskOverviewResource>(`${this.resourcePath()}/tasks/overview`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getTaskDistribution(token: string): Observable<TaskDistributionResource> {
-    console.log('GET', `${this.baseUrl}/tasks/distribution`);
-    return this.http.get<TaskDistributionResource>(
-      `${this.baseUrl}/tasks/distribution`,
-      { headers: this.getAuthHeaders(token) }
+  getTaskDistribution(): Observable<TaskDistributionResource> {
+    return this.http.get<TaskDistributionResource>(`${this.resourcePath()}/tasks/distribution`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getRescheduledTasks(token: string): Observable<RescheduledTasksResource> {
-    console.log('GET', `${this.baseUrl}/tasks/rescheduled`);
-    return this.http.get<RescheduledTasksResource>(
-      `${this.baseUrl}/tasks/rescheduled`,
-      { headers: this.getAuthHeaders(token) }
+  getRescheduledTasks(): Observable<RescheduledTasksResource> {
+    return this.http.get<RescheduledTasksResource>(`${this.resourcePath()}/tasks/rescheduled`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getAvgCompletionTime(token: string): Observable<AvgCompletionTimeResource> {
-    console.log('GET', `${this.baseUrl}/tasks/avg-completion-time`);
-    return this.http.get<AvgCompletionTimeResource>(
-      `${this.baseUrl}/tasks/avg-completion-time`,
-      { headers: this.getAuthHeaders(token) }
+  getAvgCompletionTime(): Observable<AvgCompletionTimeResource> {
+    return this.http.get<AvgCompletionTimeResource>(`${this.resourcePath()}/tasks/avg-completion-time`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getTaskOverviewForMember(memberId: number, token: string): Observable<TaskOverviewResource> {
-    return this.http.get<TaskOverviewResource>(
-      `${this.baseUrl}/member/${memberId}/tasks/overview`,
-      { headers: this.getAuthHeaders(token) }
+  getTaskOverviewForMember(memberId: number): Observable<TaskOverviewResource> {
+    return this.http.get<TaskOverviewResource>(`${this.resourcePath()}/member/${memberId}/tasks/overview`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getTaskDistributionForMember(memberId: number, token: string): Observable<TaskDistributionResource> {
-    return this.http.get<TaskDistributionResource>(
-      `${this.baseUrl}/member/${memberId}/tasks/distribution`,
-      { headers: this.getAuthHeaders(token) }
+  getTaskDistributionForMember(memberId: number): Observable<TaskDistributionResource> {
+    return this.http.get<TaskDistributionResource>(`${this.resourcePath()}/member/${memberId}/tasks/distribution`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getRescheduledTasksForMember(memberId: number, token: string): Observable<RescheduledTasksResource> {
-    return this.http.get<RescheduledTasksResource>(
-      `${this.baseUrl}/member/${memberId}/tasks/rescheduled`,
-      { headers: this.getAuthHeaders(token) }
+  getRescheduledTasksForMember(memberId: number): Observable<RescheduledTasksResource> {
+    return this.http.get<RescheduledTasksResource>(`${this.resourcePath()}/member/${memberId}/tasks/rescheduled`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 
-  getAvgCompletionTimeForMember(memberId: number, token: string): Observable<AvgCompletionTimeResource> {
-    return this.http.get<AvgCompletionTimeResource>(
-      `${this.baseUrl}/member/${memberId}/tasks/avg-completion-time`,
-      { headers: this.getAuthHeaders(token) }
+  getAvgCompletionTimeForMember(memberId: number): Observable<AvgCompletionTimeResource> {
+    return this.http.get<AvgCompletionTimeResource>(`${this.resourcePath()}/member/${memberId}/tasks/avg-completion-time`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 }
