@@ -15,23 +15,23 @@
 
   <div class="metrics-row">
     <div class="stat-card green">
-      <div class="stat-value">{{ overview.completed }}</div>
+      <div class="stat-value">{{ overview.completed ?? 0 }}</div>
       <div class="stat-label">Marcadas como Completadas</div>
     </div>
     <div class="stat-card teal">
-      <div class="stat-value">{{ overview.done }}</div>
+      <div class="stat-value">{{ overview.done ?? 0 }}</div>
       <div class="stat-label">Terminadas</div>
     </div>
     <div class="stat-card blue">
-      <div class="stat-value">{{ overview.inProgress }}</div>
+      <div class="stat-value">{{ overview.inProgress ?? 0 }}</div>
       <div class="stat-label">En progreso</div>
     </div>
     <div class="stat-card orange">
-      <div class="stat-value">{{ overview.pending }}</div>
+      <div class="stat-value">{{ overview.pending ?? 0 }}</div>
       <div class="stat-label">Pendientes</div>
     </div>
     <div class="stat-card red">
-      <div class="stat-value">{{ overview.overdue }}</div>
+      <div class="stat-value">{{ overview.overdue ?? 0 }}</div>
       <div class="stat-label">Atrasadas</div>
     </div>
   </div>
@@ -44,13 +44,13 @@
     <div *ngIf="loadingTasks" class="loading-tasks">
       <span class="material-icons spin">autorenew</span>
     </div>
-    <div *ngIf="!loadingTasks && memberTasks.length === 0" class="no-tasks">
+    <div *ngIf="!loadingTasks && (memberTasks?.length ?? 0) === 0" class="no-tasks">
       No hay tareas asignadas.
     </div>
-    <ul *ngIf="!loadingTasks && memberTasks.length > 0" class="tasks-list">
+    <ul *ngIf="!loadingTasks && (memberTasks?.length ?? 0) > 0" class="tasks-list">
       <li *ngFor="let task of memberTasks; let i = index">
         <span class="task-index">{{ i + 1 }}.</span>
-        <span class="task-title">{{ task.title }}</span>
+        <span class="task-title">{{ task?.title }}</span>
       </li>
     </ul>
   </div>
@@ -62,7 +62,7 @@
     </div>
     <div class="metric-row">
       <span>Reprogramadas</span>
-      <span class="metric-value">{{ rescheduled.rescheduled }}</span>
+      <span class="metric-value">{{ rescheduled?.rescheduled ?? 0 }}</span>
     </div>
   </div>
 
@@ -73,7 +73,9 @@
     </div>
     <div class="metric-row">
       <span class="material-icons">timer</span>
-      <span class="metric-value">{{ formatAvgCompletionTime(avgCompletion.avgDays) }}</span>
+      <span class="metric-value">
+        {{ formatAvgCompletionTime(avgCompletion?.avgDays ?? 0) }}
+      </span>
     </div>
   </div>
 </div>
