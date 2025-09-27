@@ -7,23 +7,23 @@
     </div>
     <div class="metrics-row">
       <div class="stat-card green">
-        <div class="stat-value">{{ analytics.overview?.completed ?? 0 }}</div>
+        <div class="stat-value">{{ analytics.overview.completed ?? 0 }}</div>
         <div class="stat-label">Completadas</div>
       </div>
       <div class="stat-card teal">
-        <div class="stat-value">{{ analytics.overview?.done ?? 0 }}</div>
+        <div class="stat-value">{{ analytics.overview.done ?? 0 }}</div>
         <div class="stat-label">Terminadas</div>
       </div>
       <div class="stat-card blue">
-        <div class="stat-value">{{ analytics.overview?.inProgress ?? 0 }}</div>
+        <div class="stat-value">{{ analytics.overview.inProgress ?? 0 }}</div>
         <div class="stat-label">En progreso</div>
       </div>
       <div class="stat-card orange">
-        <div class="stat-value">{{ analytics.overview?.pending ?? 0 }}</div>
+        <div class="stat-value">{{ analytics.overview.pending ?? 0 }}</div>
         <div class="stat-label">Pendientes</div>
       </div>
       <div class="stat-card red">
-        <div class="stat-value">{{ analytics.overview?.overdue ?? 0 }}</div>
+        <div class="stat-value">{{ analytics.overview.overdue ?? 0 }}</div>
         <div class="stat-label">Atrasadas</div>
       </div>
     </div>
@@ -43,10 +43,10 @@
       <span class="material-icons">account_circle</span>
       Distribución de Tareas
     </div>
-    <div *ngIf="!analytics.leaderTasks?.length">
+    <div *ngIf="!analytics.leaderTasks.length">
       <span style="color: #64748b;">No disponible</span>
     </div>
-    <div *ngIf="analytics.leaderTasks?.length">
+    <div *ngIf="analytics.leaderTasks.length">
       <div class="bar-chart-row" *ngFor="let task of analytics.leaderTasks">
         <img *ngIf="task.imgUrl" [src]="task.imgUrl" class="profile-image">
         <span class="bar-chart-label">{{ task.memberName }}</span>
@@ -75,11 +75,17 @@
       <span class="material-icons">date_range</span>
       Tiempo Promedio de Finalización
     </div>
-    <div class="metric-row">
-      <span class="material-icons">timer</span>
-      <span class="metric-value">
-        {{ formatDaysToDuration(analytics.avgCompletion?.avgDays) }}
-      </span>
+    <div *ngIf="avgCompletionMembers.length > 0">
+      <div *ngFor="let member of avgCompletionMembers" class="metric-row">
+        <img *ngIf="member.imgUrl" [src]="member.imgUrl" class="profile-image">
+        <span>{{ member.name }} {{ member.surname }}</span>
+        <span class="metric-value" style="margin-left:8px;">
+          {{ formatMinutesToDuration(member.avgMinutes) }}
+        </span>
+      </div>
+    </div>
+    <div *ngIf="!avgCompletionMembers.length">
+      <span style="color: #64748b;">No disponible</span>
     </div>
   </div>
 
@@ -113,7 +119,7 @@
     <div class="metric-row">
       <span class="material-icons">timer</span>
       <span class="metric-value">
-        {{ formatDaysToDuration(analytics.timePassed?.timePassed) }}
+        {{ formatMinutesToDuration(analytics.timePassed?.timePassed) }}
       </span>
     </div>
   </div>

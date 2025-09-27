@@ -3,23 +3,15 @@ import { CommonModule } from '@angular/common';
 import { LeaderAnalyticsResource } from '../../models/analytics-leader.entity';
 
 @Component({
-  selector: 'app-analytics-leader',
+  selector: 'app-analytics-leader', // <-- FIXED selector
   templateUrl: './analytics-leader.component.html',
   styleUrls: ['./analytics-leader.component.css'],
   imports: [CommonModule]
 })
 export class AnalyticsLeaderComponent {
-  @Input() analytics: LeaderAnalyticsResource = {
-    leader: {} as any,
-    members: [],
-    overview: {},
-    leaderTasks: [],
-    avgCompletion: {},
-    rescheduled: {},
-    timePassed: {}
-  };
-
-  @Input() membersWithRescheduled: any[] = [];
+  @Input() analytics!: LeaderAnalyticsResource;
+  @Input() membersWithRescheduled!: any[];
+  @Input() avgCompletionMembers: any[] = [];
 
   get safeMembers() {
     return this.analytics?.members ?? [];
@@ -47,6 +39,12 @@ export class AnalyticsLeaderComponent {
   formatDaysToDuration(days?: number): string {
     if (days == null || days <= 0) return 'Sin tiempo registrado';
     const ms = days * 24 * 60 * 60 * 1000;
+    return this.formatDuration(ms);
+  }
+
+  formatMinutesToDuration(minutes?: number): string {
+    if (minutes == null || minutes <= 0) return 'Sin tiempo registrado';
+    const ms = minutes * 60 * 1000;
     return this.formatDuration(ms);
   }
 
