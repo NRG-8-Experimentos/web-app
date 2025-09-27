@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { GroupsApiService } from '../../services/groups-api.service';
 import { AnalyticsLeaderApiService } from '../../services/analytics-leader-api.service';
 import { LeaderAnalyticsResource } from '../../models/analytics-leader.entity';
-import { AnalyticsLeaderComponent } from '../../components/analytics-leader/analytics-leader.component';
+import {AnalyticsLeaderComponent} from '../../components/analytics-leader/analytics-leader.component';
+import { MemberApiService } from '../../services/member-api.service';
 
 @Component({
-  selector: 'app-analytics-leader-page',
+  selector: 'app-analytics-leader-page-page',
   templateUrl: './analytics-leader-page.component.html',
   styleUrls: ['./analytics-leader-page.component.css'],
   imports: [CommonModule, AnalyticsLeaderComponent]
@@ -17,6 +18,7 @@ export class AnalyticsLeaderPageComponent implements OnInit {
 
   private groupsService = inject(GroupsApiService);
   private analyticsService = inject(AnalyticsLeaderApiService);
+  private memberService = inject(MemberApiService);
 
   analyticsResource: LeaderAnalyticsResource = new LeaderAnalyticsResource(
     {} as any,
@@ -29,6 +31,7 @@ export class AnalyticsLeaderPageComponent implements OnInit {
   );
 
   membersWithRescheduled: any[] = [];
+  avgCompletionMembers: any[] = [];
 
   ngOnInit(): void {
     this.loading = true;
@@ -56,7 +59,7 @@ export class AnalyticsLeaderPageComponent implements OnInit {
         let avgCompletionSum = 0;
         let avgCompletionCount = 0;
         let rescheduledSum = 0;
-        let timePassedSum = 0;
+        let timePassedSumMs = 0;
 
         const metricPromises = members.map(async (member: any) => {
           const memberId = member.id;
@@ -68,8 +71,10 @@ export class AnalyticsLeaderPageComponent implements OnInit {
           overview.pending += details['PENDING'] ?? 0;
           overview.overdue += details['OVERDUE'] ?? 0;
 
-          const distData = await this.analyticsService.getTaskDistributionForMember(memberId).toPromise().catch(() => []);
-          const taskCount = Array.isArray(distData) ? distData.length : (distData?.tasks?.length ?? distData?.result?.length ?? 0);
+          // Usar getTasksForMember para la distribución de tareas
+          const memberTasks = await this.memberService.getTasksForMember(memberId).toPromise().catch(() => []);
+          // console.log(`[Distribución de tareas][memberId=${memberId}]`, memberTasks); // <-- QUITAR LOG
+          const taskCount = Array.isArray(memberTasks) ? memberTasks.length : 0;
           leaderTasks.push({
             memberName: member.name + ' ' + member.surname,
             imgUrl: member.imgUrl,
@@ -78,9 +83,17 @@ export class AnalyticsLeaderPageComponent implements OnInit {
           });
 
           const avgData = await this.analyticsService.getAvgCompletionTimeForMember(memberId).toPromise().catch(() => ({}));
+          // console.log(`[Tiempo promedio][memberId=${memberId}]`, avgData); // <-- QUITAR LOG
           if (avgData?.value !== undefined) {
-            avgCompletionSum += Math.round(avgData.value * 24 * 60);
+            const avgMinutes = Math.round(avgData.value * 24 * 60);
+            avgCompletionSum += avgMinutes;
             avgCompletionCount++;
+            this.avgCompletionMembers.push({
+              name: member.name,
+              surname: member.surname,
+              imgUrl: member.imgUrl,
+              avgMinutes: avgMinutes
+            });
           }
 
           const rescheduledData = await this.analyticsService.getRescheduledTasksForMember(memberId).toPromise().catch(() => ({}));
@@ -88,7 +101,7 @@ export class AnalyticsLeaderPageComponent implements OnInit {
           member.rescheduledCount = rescheduledData?.value ?? 0;
 
           const timePassedData = await this.analyticsService.getTaskTimePassedForMember(memberId).toPromise().catch(() => ({}));
-          timePassedSum += timePassedData?.value ?? 0;
+          timePassedSumMs += timePassedData?.timePassed ?? 0;
         });
 
         await Promise.all(metricPromises);
@@ -97,9 +110,13 @@ export class AnalyticsLeaderPageComponent implements OnInit {
 
         this.analyticsResource.overview = overview;
         this.analyticsResource.leaderTasks = leaderTasks;
-        this.analyticsResource.avgCompletion = { avgDays: avgCompletionCount ? Math.round(avgCompletionSum / avgCompletionCount) : 0 };
+        const avgMinutes = avgCompletionCount ? Math.round(avgCompletionSum / avgCompletionCount) : 0;
+        this.analyticsResource.avgCompletion = {
+          avgDays: avgMinutes
+        };
         this.analyticsResource.rescheduled = { rescheduled: rescheduledSum };
-        this.analyticsResource.timePassed = { timePassed: timePassedSum };
+        this.analyticsResource.timePassed = { timePassed: Math.round(timePassedSumMs / 60000) }; // Suma en minutos
+        this.avgCompletionMembers = this.avgCompletionMembers; // <-- Ya está actualizada, puedes omitir esta línea si lo prefieres
 
         this.loading = false;
       },

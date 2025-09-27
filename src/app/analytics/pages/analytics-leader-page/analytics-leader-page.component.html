@@ -8,7 +8,8 @@
   <ng-container *ngIf="!loading && !error">
     <app-analytics-leader
       [analytics]="analyticsResource"
-      [membersWithRescheduled]="membersWithRescheduled">
+      [membersWithRescheduled]="membersWithRescheduled"
+      [avgCompletionMembers]="avgCompletionMembers">
     </app-analytics-leader>
   </ng-container>
 </div>
