@@ -1,1 +1,107 @@
-<p>analytics-leader.component works!</p>
+<div class="analytics-container">
+  <ng-container *ngIf="loading">
+    <div class="metric-card">
+      <h2>Cargando métricas...</h2>
+      <p>Por favor espera...</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading">
+    <!-- Overview Section -->
+    <div class="metric-card">
+      <div class="section-title">
+        <span class="section-icon material-icons">info</span>
+        <span>Resumen General</span>
+      </div>
+      <div class="metric-row highlight">
+        <span>Tareas completadas</span>
+        <span>{{ overview?.overview?.['COMPLETED'] ?? 0 }}</span>
+      </div>
+      <div class="metric-row">
+        <span>Tareas en progreso</span>
+        <span>{{ overview?.overview?.['IN_PROGRESS'] ?? 0 }}</span>
+      </div>
+      <div class="metric-row">
+        <span>Total de tareas</span>
+        <span>{{ overview?.totalTasks ?? 0 }}</span>
+      </div>
+      <div class="metric-row">
+        <span>Tareas reprogramadas</span>
+        <span>{{ rescheduled?.details?.['rescheduled'] ?? 0 }}</span>
+      </div>
+    </div>
+
+    <!-- Distribution Section -->
+    <div class="metric-card">
+      <div class="section-title">
+        <span class="section-icon material-icons">account_circle</span>
+        <span>Distribución de Tareas</span>
+      </div>
+      <ng-container *ngIf="distribution?.details">
+        <div class="distribution-list">
+          <div *ngFor="let memberId of getKeys(distribution?.details); trackBy: trackByMemberId" class="distribution-row">
+            <img
+              class="profile-img"
+              [src]="distribution?.details?.[memberId]?.imgUrl || defaultProfileUrl"
+              alt="Foto de {{ distribution?.details?.[memberId]?.memberName }}"
+            />
+            <span class="member-name">{{ distribution?.details?.[memberId]?.memberName || '' }}</span>
+            <div class="bar-container">
+              <div class="bar-bg">
+                <div class="bar-fg" [style.width.%]="getBarWidth(distribution?.details?.[memberId]?.taskCount)"></div>
+              </div>
+              <span class="task-count">{{ distribution?.details?.[memberId]?.taskCount || 0 }} tareas</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!distribution?.details">
+        <p class="no-data">No disponible</p>
+      </ng-container>
+    </div>
+
+    <!-- Completion Time Section (solo error) -->
+    <div class="metric-card error-card">
+      <div class="section-title">
+        <span class="section-icon material-icons">date_range</span>
+        <span>Tiempo promedio de finalización</span>
+      </div>
+      <h2>Error</h2>
+      <p>Error al cargar tiempo promedio de finalización</p>
+      <p>Verifica la conexión o contacta al administrador.</p>
+    </div>
+
+    <!-- Rescheduled Section -->
+    <div class="metric-card">
+      <div class="section-title">
+        <span class="section-icon material-icons">build</span>
+        <span>Tareas reprogramadas</span>
+      </div>
+      <div class="metric-row highlight">
+        <span>Total reprogramadas</span>
+        <span>{{ rescheduled?.totalRescheduled ?? 0 }}</span>
+      </div>
+      <div class="metric-row">
+        <span>Total tareas</span>
+        <span>{{ rescheduled?.details?.['total'] ?? 0 }}</span>
+      </div>
+      <div class="rescheduled-members">
+        <strong>Miembros que reprogramaron tareas:</strong>
+        <div *ngIf="rescheduled?.rescheduledMemberIds?.length; else noMembers">
+          <div *ngFor="let memberId of rescheduled?.rescheduledMemberIds" class="rescheduled-row">
+            <img
+              class="profile-img"
+              [src]="getMemberImgUrl(memberId) || defaultProfileUrl"
+              alt="Foto de miembro {{ memberId }}"
+            />
+            <span class="member-id">Miembro ID: {{ memberId }}</span>
+            <span class="material-icons rescheduled-icon">build</span>
+          </div>
+        </div>
+        <ng-template #noMembers>
+          <span class="no-data">Ningún miembro ha reprogramado tareas.</span>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>
