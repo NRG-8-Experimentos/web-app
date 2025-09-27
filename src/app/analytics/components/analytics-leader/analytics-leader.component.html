@@ -57,7 +57,7 @@
               [ngStyle]="{'width': ((task.taskCount || 1) * 100 / getMaxTaskCount(analytics.leaderTasks)) + '%'}"
             ></div>
           </div>
-          <span class="bar-chart-value badge">
+          <span class="bar-chart-value badge" style="white-space:nowrap;">
             {{ task.taskCount }} {{ task.taskCount === 1 ? 'tarea' : 'tareas' }}
           </span>
         </div>
@@ -117,7 +117,7 @@
                 [ngStyle]="{'width': ((member.rescheduledCount || 1) * 100 / getMaxTaskCount(membersWithRescheduled)) + '%'}"
               ></div>
             </div>
-            <span class="bar-chart-value badge">
+            <span class="bar-chart-value badge" style="white-space:nowrap;">
               {{ member.rescheduledCount }} {{ member.rescheduledCount === 1 ? 'tarea' : 'tareas' }}
             </span>
           </div>

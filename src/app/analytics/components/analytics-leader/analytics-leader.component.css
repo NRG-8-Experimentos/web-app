@@ -131,6 +131,7 @@
   color: #2563eb;
   margin-left: 12px;
   font-size: 1.08rem;
+  white-space: nowrap;
 }
 
 .badge {
@@ -142,6 +143,7 @@
   font-weight: 500;
   margin-left: 8px;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .empty-section {
