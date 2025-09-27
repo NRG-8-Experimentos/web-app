@@ -14,7 +14,7 @@
     </div>
   }
   <ul class="sidenav-nav">
-    @for (data of navData; track data.id) {
+    @for (data of navData; track data.title) {
       <li class="sidenav-nav-item">
         <a class="sidenav-nav-link" [routerLink]="[data.path]"
            routerLinkActive="active"

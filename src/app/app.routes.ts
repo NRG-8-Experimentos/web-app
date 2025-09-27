@@ -15,6 +15,7 @@ import {MyGroupMemberComponent} from './groups/pages/my-group-member/my-group-me
 import {TasksMemberComponent} from './tasks/pages/tasks-member/tasks-member.component';
 import {RequestsMemberComponent} from './requests/pages/requests-member/requests-member.component';
 import {AnalyticsMemberComponent} from './analytics/pages/analytics-member/analytics-member.component';
+import {InvitationMemberComponent} from './invitations/pages/invitation-member/invitation-member.component';
 
 export const routes: Routes = [
   {path: '', component: MainComponent, canActivate:[authGuard]},
@@ -32,5 +33,6 @@ export const routes: Routes = [
   { path: 'members/my-group/tasks', component: TasksMemberComponent },
   { path: 'members/my-group/request-&-validations', component: RequestsMemberComponent},
   { path: 'members/my-group/analytics', component: AnalyticsMemberComponent },
+  { path: 'members/group-search', component: InvitationMemberComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -1,10 +1,12 @@
 <main>
   <div class="screen">
-    <app-sidenav
-      *ngIf="showSideBar"
-      [navData]="isLeader ? optionsLeader : optionsMember"
-      [role] = "isLeader ? 'leader' : 'member'"
-      (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+    @if (showSideBar) {
+      <app-sidenav
+        [navData]="isLeader ? optionsLeader : optionsMember"
+        [role]="isLeader ? 'leader' : 'member'"
+        (onToggleSideNav)="onToggleSideNav($event)">
+      </app-sidenav>
+    }
     <app-body
       [collapsed]="isSideNavCollapsed"
       [screenWidth]="screenWidth"
