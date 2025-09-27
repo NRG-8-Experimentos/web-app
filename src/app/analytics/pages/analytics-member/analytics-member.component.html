@@ -1,1 +1,88 @@
-<p>analytics-member.component works!</p>
+<div class="analytics-container">
+  <ng-container *ngIf="loading">
+    <div class="metric-card">
+      <h2>Cargando métricas...</h2>
+      <p>Por favor espera...</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!loading">
+    <!-- Card principal con avatar y nombre -->
+    <div class="metric-card main-card">
+      <div class="profile-row">
+        <img class="profile-img" [src]="profileImageUrl" alt="Foto de perfil" />
+        <div class="profile-info">
+          <div class="profile-name">{{ memberName }}</div>
+          <div class="profile-username">{{ username }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métricas de estado de tareas -->
+    <div class="metrics-scroll">
+      <div class="stat-card" style="background:#B9F6CA;">
+        <div class="stat-value">{{ overview.completed }}</div>
+        <div class="stat-label">Marcadas como Completadas</div>
+      </div>
+      <div class="stat-card" style="background:#A7FFEB;">
+        <div class="stat-value">{{ overview.done }}</div>
+        <div class="stat-label">Terminadas</div>
+      </div>
+      <div class="stat-card" style="background:#82B1FF;">
+        <div class="stat-value">{{ overview.inProgress }}</div>
+        <div class="stat-label">En progreso</div>
+      </div>
+      <div class="stat-card" style="background:#FFE082;">
+        <div class="stat-value">{{ overview.pending }}</div>
+        <div class="stat-label">Pendientes</div>
+      </div>
+      <div class="stat-card" style="background:#FF8A80;">
+        <div class="stat-value">{{ overview.overdue }}</div>
+        <div class="stat-label">Atrasadas</div>
+      </div>
+    </div>
+
+    <!-- Distribución de tareas -->
+    <div class="metric-card section-card">
+      <div class="section-title">
+        <span class="material-icons section-icon">list_alt</span>
+        <span>Distribución de Tareas</span>
+      </div>
+      <div class="tasks-list">
+        <div *ngIf="memberTasks.length === 0" class="no-data">No hay tareas asignadas.</div>
+        <div *ngFor="let task of memberTasks; trackBy: trackByTask" class="task-row">
+          <span class="task-index">{{ memberTasks.indexOf(task) + 1 }}.</span>
+          <span class="task-title">{{ task.title }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reprogramaciones -->
+    <div class="metric-card section-card">
+      <div class="section-title">
+        <span class="material-icons section-icon">build</span>
+        <span>Cantidad total de reprogramaciones</span>
+      </div>
+      <div class="metric-row">
+        <span>Reprogramadas</span>
+        <span class="metric-value">{{ rescheduled.rescheduled }}</span>
+      </div>
+      <div class="metric-row">
+        <span>No reprogramadas</span>
+        <span class="metric-value">{{ rescheduled.notRescheduled }}</span>
+      </div>
+    </div>
+
+    <!-- Tiempo promedio de finalización -->
+    <div class="metric-card section-card">
+      <div class="section-title">
+        <span class="material-icons section-icon">date_range</span>
+        <span>Tiempo Promedio de Finalización</span>
+      </div>
+      <div class="metric-row">
+        <span class="material-icons metric-icon">timer</span>
+        <span class="metric-value">{{ formatAvgCompletionTime(avgCompletion.avgDays) }}</span>
+      </div>
+    </div>
+  </ng-container>
+</div>
