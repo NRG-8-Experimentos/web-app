@@ -1,0 +1,120 @@
+<div class="analytics-leader-screen">
+  <!-- Resumen General -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="material-icons">info</span>
+      Resumen General
+    </div>
+    <div class="metrics-row">
+      <div class="stat-card green">
+        <div class="stat-value">{{ analytics.overview?.completed ?? 0 }}</div>
+        <div class="stat-label">Completadas</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-value">{{ analytics.overview?.done ?? 0 }}</div>
+        <div class="stat-label">Terminadas</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-value">{{ analytics.overview?.inProgress ?? 0 }}</div>
+        <div class="stat-label">En progreso</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-value">{{ analytics.overview?.pending ?? 0 }}</div>
+        <div class="stat-label">Pendientes</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-value">{{ analytics.overview?.overdue ?? 0 }}</div>
+        <div class="stat-label">Atrasadas</div>
+      </div>
+    </div>
+    <!-- Miembros del grupo debajo de la sección -->
+    <div style="margin-top: 12px;">
+      <span style="color:#1a4e85;font-weight:bold;">Todos los miembros:</span>
+      <div *ngFor="let member of safeMembers" class="metric-row">
+        <img *ngIf="member.imgUrl" [src]="member.imgUrl" class="profile-image">
+        <span>{{ member.name }} {{ member.surname }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Distribución de Tareas -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="material-icons">account_circle</span>
+      Distribución de Tareas
+    </div>
+    <div *ngIf="!analytics.leaderTasks?.length">
+      <span style="color: #64748b;">No disponible</span>
+    </div>
+    <div *ngIf="analytics.leaderTasks?.length">
+      <div class="bar-chart-row" *ngFor="let task of analytics.leaderTasks">
+        <img *ngIf="task.imgUrl" [src]="task.imgUrl" class="profile-image">
+        <span class="bar-chart-label">{{ task.memberName }}</span>
+        <div class="bar-chart-bar-bg">
+          <div
+            class="bar-chart-bar-fg"
+            [ngStyle]="{'width': ((task.taskCount || 1) * 100 / getMaxTaskCount(analytics.leaderTasks)) + '%'}"
+          ></div>
+        </div>
+        <span class="bar-chart-value">{{ task.taskCount || 1 }} tareas</span>
+      </div>
+    </div>
+    <!-- Miembros del grupo debajo de la sección -->
+    <div style="margin-top: 12px;">
+      <span style="color:#1a4e85;font-weight:bold;">Todos los miembros:</span>
+      <div *ngFor="let member of safeMembers" class="metric-row">
+        <img *ngIf="member.imgUrl" [src]="member.imgUrl" class="profile-image">
+        <span>{{ member.name }} {{ member.surname }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tiempo Promedio de Finalización -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="material-icons">date_range</span>
+      Tiempo Promedio de Finalización
+    </div>
+    <div class="metric-row">
+      <span class="material-icons">timer</span>
+      <span class="metric-value">
+        {{ formatDaysToDuration(analytics.avgCompletion?.avgDays) }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Tareas Reprogramadas -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="material-icons">build</span>
+      Tareas Reprogramadas
+    </div>
+    <div class="metric-row">
+      <span>Total reprogramadas</span>
+      <span class="metric-value">{{ analytics.rescheduled?.rescheduled ?? 0 }}</span>
+    </div>
+    <!-- Miembros con tareas reprogramadas y contador -->
+    <div style="margin-top: 12px;">
+      <span style="color:#1a4e85;font-weight:bold;">Miembros con tareas reprogramadas:</span>
+      <div *ngFor="let member of membersWithRescheduled" class="metric-row">
+        <img *ngIf="member.imgUrl" [src]="member.imgUrl" class="profile-image">
+        <span>{{ member.name }} {{ member.surname }}</span>
+        <span style="margin-left:8px; color:#64748b;">({{ member.rescheduledCount }} tareas)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tiempo pasado en tareas completadas -->
+  <div class="section-card">
+    <div class="section-title">
+      <span class="material-icons">hourglass_bottom</span>
+      Tiempo pasado en tareas completadas
+    </div>
+    <div class="metric-row">
+      <span class="material-icons">timer</span>
+      <span class="metric-value">
+        {{ formatDaysToDuration(analytics.timePassed?.timePassed) }}
+      </span>
+    </div>
+  </div>
+</div>
