@@ -11,6 +11,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {
   NoGroupMemberDisplayComponent
 } from '@app/groups/components/no-group-member-display/no-group-member-display.component';
+import {MemberGroup} from '@app/groups/model/member-group.entity';
 @Component({
   selector: 'app-my-group-member',
   imports: [
@@ -81,44 +82,34 @@ import {
 })
 export class MyGroupMemberComponent {
   hasGroup = false;
-  hasMembers = false;
+  hasMembers = true;
   loading = true;
   members !: ShortMember[];
-  group !: Group;
+  group !: MemberGroup;
 
-  constructor(private memberGroupService: MemberGroupService, private groupService:GroupService, private dialog : MatDialog) {
+  constructor(private memberGroupService: MemberGroupService ) {
   }
 
   ngOnInit(){
     this.getMemberGroup();
-    this.getMembersOfGroup();
   }
 
   getMemberGroup(){
     this.memberGroupService.getMemberGroup().subscribe({
-      next: (group) => {
-        this.group = group;
+      next: (memberGroup) => {
+        this.group = memberGroup
+        this.members = memberGroup.members;
         this.hasGroup = true;
+        this.loading = false;
       },
       error: (err) => {
         this.hasGroup = false;
+        this.loading = false;
       }
     })
   }
 
-  getMembersOfGroup(){
-    this.groupService.getAllMembersOfGroup().subscribe({
-      next: (members) => {
-        this.members = members;
-        this.hasMembers = members.length > 0;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.hasMembers = false;
-        this.loading = false;
-      }
-    })
-  }
+
 
 
 
