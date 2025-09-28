@@ -71,9 +71,8 @@ export class AnalyticsLeaderPageComponent implements OnInit {
           overview.pending += details['PENDING'] ?? 0;
           overview.overdue += details['OVERDUE'] ?? 0;
 
-          // Usar getTasksForMember para la distribución de tareas
+          // Usar getTasksForMember para la distribución y conteo de estados
           const memberTasks = await this.memberService.getTasksForMember(memberId).toPromise().catch(() => []);
-          // console.log(`[Distribución de tareas][memberId=${memberId}]`, memberTasks); // <-- QUITAR LOG
           const taskCount = Array.isArray(memberTasks) ? memberTasks.length : 0;
           leaderTasks.push({
             memberName: member.name + ' ' + member.surname,
@@ -81,6 +80,15 @@ export class AnalyticsLeaderPageComponent implements OnInit {
             taskCount: taskCount,
             title: member.title
           });
+
+          // Contar tareas por estado usando memberTasks
+          if (Array.isArray(memberTasks)) {
+            overview.pending += memberTasks.filter(t => t.status === 'ON_HOLD').length;
+            overview.inProgress += memberTasks.filter(t => t.status === 'IN_PROGRESS').length;
+            overview.completed += memberTasks.filter(t => t.status === 'COMPLETED').length;
+            overview.done += memberTasks.filter(t => t.status === 'DONE').length;
+            overview.overdue += memberTasks.filter(t => t.status === 'EXPIRED').length;
+          }
 
           const avgData = await this.analyticsService.getAvgCompletionTimeForMember(memberId).toPromise().catch(() => ({}));
           // console.log(`[Tiempo promedio][memberId=${memberId}]`, avgData); // <-- QUITAR LOG

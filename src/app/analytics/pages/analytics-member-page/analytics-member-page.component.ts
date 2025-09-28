@@ -29,23 +29,15 @@ export class AnalyticsMemberPageComponent {
       this.member = response;
       const memberId = response.id;
 
-      // Usar los endpoints por miembro del servicio leader
-      this.leaderMetricsService.getTaskOverviewForMember(memberId).subscribe(data => {
-        const overviewData = data as any;
-        const details = overviewData.details ?? {};
-        this.overview = {
-          completed: details['COMPLETED'] ?? 0,
-          done: details['DONE'] ?? 0,
-          inProgress: details['IN_PROGRESS'] ?? 0,
-          pending: details['PENDING'] ?? 0,
-          overdue: details['OVERDUE'] ?? 0
-        };
-      });
-
-      this.loadingTasks = true;
-      // Usa el endpoint de miembro para la distribución de tareas
-      this.memberApiService.getTasksForAuthenticatedMember().subscribe(data => {
-        this.memberTasks = Array.isArray(data) ? data : [];
+      // Usar getTasksForMember para obtener todas las tareas y contar estados
+      this.memberApiService.getTasksForMember(memberId).subscribe(memberTasks => {
+        this.memberTasks = Array.isArray(memberTasks) ? memberTasks : [];
+        // Contar tareas por estado
+        this.overview.pending = this.memberTasks.filter(t => t.status === 'ON_HOLD').length;
+        this.overview.inProgress = this.memberTasks.filter(t => t.status === 'IN_PROGRESS').length;
+        this.overview.completed = this.memberTasks.filter(t => t.status === 'COMPLETED').length;
+        this.overview.done = this.memberTasks.filter(t => t.status === 'DONE').length;
+        this.overview.overdue = this.memberTasks.filter(t => t.status === 'EXPIRED').length;
         this.loadingTasks = false;
       }, err => {
         this.memberTasks = [];
