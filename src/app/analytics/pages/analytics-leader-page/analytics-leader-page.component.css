@@ -1,7 +1,7 @@
 .analytics-leader-screen {
-  max-width: 1600px; /* antes 900px */
+  max-width: 1600px;
   margin: 32px auto;
-  padding: 56px 48px; /* antes 24px */
+  padding: 56px 48px;
   background: #f5f5f5;
   border-radius: 18px;
   box-shadow: 0 2px 16px rgba(26, 78, 133, 0.07);
@@ -135,12 +135,10 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Separador visual entre secciones */
 .section-card:not(:last-child) {
   margin-bottom: 32px;
 }
 
-/* Inspirado en Analytics.kt: barra de tareas por miembro */
 .bar-chart-row {
   display: flex;
   align-items: center;

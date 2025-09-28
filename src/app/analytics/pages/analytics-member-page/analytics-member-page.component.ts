@@ -16,7 +16,7 @@ import { MemberApiService } from '../../services/member-api.service';
 export class AnalyticsMemberPageComponent {
   private detailsService = inject(DetailsService);
   private leaderMetricsService = inject(AnalyticsLeaderApiService);
-  private memberApiService = inject(MemberApiService); // Inyecta el servicio de miembro
+  private memberApiService = inject(MemberApiService);
   member: Member | null = null;
   overview: any = {};
   loadingTasks: boolean = false;
@@ -29,10 +29,8 @@ export class AnalyticsMemberPageComponent {
       this.member = response;
       const memberId = response.id;
 
-      // Usar getTasksForMember para obtener todas las tareas y contar estados
       this.memberApiService.getTasksForMember(memberId).subscribe(memberTasks => {
         this.memberTasks = Array.isArray(memberTasks) ? memberTasks : [];
-        // Contar tareas por estado
         this.overview.pending = this.memberTasks.filter(t => t.status === 'ON_HOLD').length;
         this.overview.inProgress = this.memberTasks.filter(t => t.status === 'IN_PROGRESS').length;
         this.overview.completed = this.memberTasks.filter(t => t.status === 'COMPLETED').length;

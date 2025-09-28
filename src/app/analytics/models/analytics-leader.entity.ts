@@ -1,4 +1,3 @@
-// src/app/analytics/models/leader-analytics-resource.entity.ts
 import { Leader } from '../../shared/model/leader.entity';
 import { Member } from '../../shared/model/member.entity';
 

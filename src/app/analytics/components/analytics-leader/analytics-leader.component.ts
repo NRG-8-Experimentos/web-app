@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LeaderAnalyticsResource } from '../../models/analytics-leader.entity';
 
 @Component({
-  selector: 'app-analytics-leader', // <-- FIXED selector
+  selector: 'app-analytics-leader',
   templateUrl: './analytics-leader.component.html',
   styleUrls: ['./analytics-leader.component.css'],
   imports: [CommonModule]
@@ -18,7 +18,6 @@ export class AnalyticsLeaderComponent {
   }
 
   getMemberTaskCount(member: any): number {
-    // Adjust logic if needed based on your actual member/task structure
     if (member.taskCount && typeof member.taskCount === 'number') {
       return member.taskCount;
     }
