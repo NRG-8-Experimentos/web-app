@@ -7,10 +7,7 @@ import {GroupDisplayComponent} from '../../components/group-display/group-displa
     GroupDisplayComponent
   ],
   template: `
-    <div class="h-full w-full">
-
-      <app-group-display/>
-    </div>
+    <app-group-display/>
   `,
   styleUrl: './my-group-leader.component.css'
 })
