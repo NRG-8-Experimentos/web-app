@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {CreateGroupRequest} from '@app/groups/model/requests/create-group.request';
-import {GroupService} from '@app/groups/services/group.service';
+import {LeaderGroupService} from '@app/groups/services/leader-group.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {CommonModule} from '@angular/common';
@@ -68,7 +68,7 @@ export class CreateGroupComponent {
   createGroupForm: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder, private groupService : GroupService, private router: Router) {
+  constructor(private fb: FormBuilder, private leaderGroupService : LeaderGroupService, private router: Router) {
     this.createGroupForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
@@ -77,8 +77,6 @@ export class CreateGroupComponent {
   }
 
   onSubmit(): void {
-    return;
-
     if (this.createGroupForm.invalid) return;
 
     const name = this.createGroupForm.value.name ?? '';
@@ -86,7 +84,14 @@ export class CreateGroupComponent {
     const imgUrl = this.createGroupForm.value.imgUrl ?? '';
 
 
-    this.groupService.createGroup(new CreateGroupRequest(name, description, imgUrl));
+    this.leaderGroupService.createGroup(new CreateGroupRequest(name, description, imgUrl)).subscribe({
+      next: () => {
+        this.router.navigate(['leaders/group']).then();
+      },
+      error: (err) => {
+        console.error('Error creating group', err);
+      }
+    })
     this.submitted = true;
   }
 

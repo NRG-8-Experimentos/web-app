@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-no-group-display',
@@ -11,7 +12,9 @@ import { Component } from '@angular/core';
           <p>
             No haz creado tu grupo todavia
           </p>
-          <button class="bg-[#4A90E2] rounded-2xl py-2 px-6 shadow-md shadow-gray-800 hover:cursor-pointer hover:bg-[#559df2] transition">
+          <button
+            (click)="goToCreateGroup()"
+            class="bg-[#4A90E2] rounded-2xl py-2 px-6 shadow-md shadow-gray-800 hover:cursor-pointer hover:bg-[#559df2] transition">
             Crear Grupo
           </button>
         </div>
@@ -22,4 +25,10 @@ import { Component } from '@angular/core';
 })
 export class NoGroupDisplayComponent {
 
+  constructor(public route: Router) {
+  }
+
+  goToCreateGroup() {
+    this.route.navigate(['leaders/create-group']).then();
+  }
 }
