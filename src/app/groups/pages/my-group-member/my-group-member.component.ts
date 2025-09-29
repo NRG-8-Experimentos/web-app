@@ -27,12 +27,10 @@ import {MemberGroup} from '@app/groups/model/member-group.entity';
         </div>
       } @else {
         @if (hasGroup){
-          <div class="w-full h-full grid grid-cols-2 gap-16">
+          <div class="w-full h-full grid grid-cols-2 gap-16 min-h-0">
             <div class="w-full h-full flex flex-col gap-7">
               <h2 class="text-2xl font-bold">Grupo</h2>
-
               <app-profile-image-display [groupName]="group.name" alt="Imagen del grupo" [imgSrc]="group.imgUrl"/>
-
               <div class="text-white flex justify-center items-center">
                 <div class="bg-[#4A90E2] rounded-2xl py-2 px-6 text-xl">
                   #{{ group.code}}
@@ -40,16 +38,20 @@ import {MemberGroup} from '@app/groups/model/member-group.entity';
               </div>
               <div class="w-full flex-1">
                 <div class="w-full h-full rounded-3xl bg-[#1A4E85] p-8 text-white text-center text-xl flex items-center">
-                  {{ group.description }}
+                  @if (group.description.length > 200) {
+                    {{ group.description.slice(0, 200) + '...'}}
+                  } @else {
+                    {{ group.description }}
+                  }
                 </div>
               </div>
             </div>
-            <div class="h-full flex flex-col gap-7">
+            <div class="h-full flex flex-col gap-7 min-h-0">
               <h2 class="text-2xl font-bold">Miembros</h2>
               @if (hasMembers) {
-                <div class="flex-1  rounded-3xl bg-[#F4F4F4] p-8 text-black text-center text-xl ">
+                <div class="flex-1  rounded-3xl bg-[#F4F4F4] p-8 text-black text-center text-xl min-h-0">
                   <div class="bg-white rounded-2xl h-full">
-                    <div class="flex flex-col p-4 gap-4 h-full ">
+                    <div class="flex flex-col p-4 gap-4 h-full overflow-y-auto">
 
                       @for (member of members; track member.id) {
                         <div class="flex justify-between items-center">
@@ -110,7 +112,5 @@ export class MyGroupMemberComponent {
   }
 
 
-
-
-
+  protected readonly Array = Array;
 }
