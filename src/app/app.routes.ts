@@ -6,7 +6,7 @@ import {MainLeaderComponent} from './shared/pages/main-leader/main-leader.compon
 import {MainComponent} from './public/pages/main/main.component';
 import {authGuard} from './iam/services/auth-guard';
 import {MyGroupLeaderComponent} from './groups/pages/my-group-leader/my-group-leader.component';
-import {MembersLeaderComponent} from './groups/pages/members-leader/members-leader.component';
+
 import {InvitationsLeaderComponent} from './invitations/pages/invitations-leader/invitations-leader.component';
 import {RequestsLeaderComponent} from './requests/pages/requests-leader/requests-leader.component';
 import {TasksLeaderComponent} from './tasks/pages/tasks-leader/tasks-leader.component';
@@ -16,6 +16,8 @@ import {RequestsMemberComponent} from './requests/pages/requests-member/requests
 import {AnalyticsMemberPageComponent} from './analytics/pages/analytics-member-page/analytics-member-page.component';
 import {InvitationMemberComponent} from './invitations/pages/invitation-member/invitation-member.component';
 import {AnalyticsLeaderPageComponent } from './analytics/pages/analytics-leader-page/analytics-leader-page.component';
+import {CreateGroupComponent} from '@app/groups/pages/create-group/create-group.component';
+import {MembersLeaderComponent} from '@app/groups/pages/members-leader/members-leader.component';
 
 export const routes: Routes = [
   {path: '', component: MainComponent, canActivate:[authGuard]},
@@ -25,6 +27,7 @@ export const routes: Routes = [
   { path: 'leaders/main', component: MainLeaderComponent },
   { path: 'leaders/my-group', component: MyGroupLeaderComponent },
   { path: 'leaders/my-group/members', component: MembersLeaderComponent },
+  { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
   { path: 'leaders/my-group/tasks', component: TasksLeaderComponent },

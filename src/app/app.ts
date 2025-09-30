@@ -1,7 +1,7 @@
 import {Component, signal, ViewChild} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material/sidenav';
-import {SidenavComponent} from './shared/components/sidenav.component/sidenav.component';
+import {SidenavComponent} from '@app/shared/components/sidenav/sidenav.component';
 import {BodyComponent} from './shared/pages/body/body.component';
 import {LoginEventService} from './iam/services/login-event.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';

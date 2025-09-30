@@ -4,11 +4,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import {InvitationsApiService} from '../../services/invitations-api.service';
-import {GroupsApiService} from '../../../groups/services/groups-api.service';
-import {Group} from '../../../groups/model/group.entity';
 import {Invitation} from '../../model/invitation.entity';
-import {DetailsService} from '../../../shared/services/details.service';
 import {Router} from '@angular/router';
+import {Group} from '@app/groups/model/group.entity';
+import {DetailsService} from '@app/shared/services/details.service';
+import {GroupService} from '@app/groups/services/group.service';
 
 @Component({
   selector: 'app-invitation-member',
@@ -28,7 +28,7 @@ export class InvitationMemberComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private invitationsApi: InvitationsApiService,
-    private groupsApi: GroupsApiService,
+    private groupsApi: GroupService,
     private detailsService: DetailsService,
     private router: Router
     ) {
