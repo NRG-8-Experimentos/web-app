@@ -1,0 +1,98 @@
+<div class="analytics-member-screen">
+  <div class="section-card enhanced-section">
+    <div class="section-title">
+      <span class="material-icons">info</span>
+      <span>Resumen General</span>
+    </div>
+    <div class="metrics-row">
+      <div class="stat-card green">
+        <div class="stat-value">{{ overview.completed ?? 0 }}</div>
+        <div class="stat-label">Completadas</div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-value">{{ overview.done ?? 0 }}</div>
+        <div class="stat-label">Terminadas</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-value">{{ overview.inProgress ?? 0 }}</div>
+        <div class="stat-label">En progreso</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-value">{{ overview.pending ?? 0 }}</div>
+        <div class="stat-label">Pendientes</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-value">{{ overview.overdue ?? 0 }}</div>
+        <div class="stat-label">Atrasadas</div>
+      </div>
+    </div>
+    <hr class="section-divider">
+    <div class="member-card member-row">
+      <div class="profile-image avatar">
+        <img *ngIf="member?.imgUrl; else defaultAvatar" [src]="member?.imgUrl" alt="Avatar" />
+        <ng-template #defaultAvatar>
+          <span class="default-avatar">&#128100;</span>
+        </ng-template>
+      </div>
+      <span class="member-name">{{ member?.name }} {{ member?.surname }}</span>
+      <span class="member-username">{{ member?.username }}</span>
+      <span class="member-email">{{ member?.email }}</span>
+    </div>
+  </div>
+
+  <div class="section-card enhanced-section">
+    <div class="section-title">
+      <span class="material-icons">list_alt</span>
+      <span>Distribución de Tareas</span>
+    </div>
+    <div *ngIf="loadingTasks" class="loading-tasks">
+      <span class="material-icons spin">autorenew</span>
+    </div>
+    <div *ngIf="!loadingTasks && (memberTasks?.length ?? 0) === 0" class="empty-section">
+      No hay tareas asignadas.
+    </div>
+    <div *ngIf="!loadingTasks && (memberTasks?.length ?? 0) > 0">
+      <div class="bar-chart-row">
+        <span class="bar-chart-label">Total</span>
+        <div class="bar-chart-bar-bg">
+          <div class="bar-chart-bar-fg" [ngStyle]="{'width': '100%'}"></div>
+        </div>
+        <span class="bar-chart-value badge" style="white-space:nowrap;">
+          {{ memberTasks.length }} {{ memberTasks.length === 1 ? 'tarea' : 'tareas' }}
+        </span>
+      </div>
+      <ul class="tasks-list">
+        <li *ngFor="let task of memberTasks; let i = index">
+          <span class="task-index">{{ i + 1 }}.</span>
+          <span class="task-title">{{ task?.title }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-card enhanced-section">
+    <div class="section-title">
+      <span class="material-icons">build</span>
+      <span>Cantidad total de reprogramaciones</span>
+    </div>
+    <div class="metric-row">
+      <span>Reprogramadas</span>
+      <span class="metric-value badge">
+        {{ rescheduled?.rescheduled ?? 0 }} {{ (rescheduled?.rescheduled ?? 0) === 1 ? 'tarea' : 'tareas' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="section-card enhanced-section">
+    <div class="section-title">
+      <span class="material-icons">date_range</span>
+      <span>Tiempo Promedio de Finalización</span>
+    </div>
+    <div class="metric-row">
+      <span class="material-icons">timer</span>
+      <span class="metric-value badge">
+        {{ formatAvgCompletionTime(avgCompletion?.avgDays ?? 0) }}
+      </span>
+    </div>
+  </div>
+</div>
