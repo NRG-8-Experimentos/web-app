@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MemberListComponent } from './member-list.component';
+import { NoGroupDisplayComponent } from './no-group-display.component';
 
-describe('MemberListComponent', () => {
-  let component: MemberListComponent;
-  let fixture: ComponentFixture<MemberListComponent>;
+describe('NoGroupDisplayComponent', () => {
+  let component: NoGroupDisplayComponent;
+  let fixture: ComponentFixture<NoGroupDisplayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberListComponent]
+      imports: [NoGroupDisplayComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MemberListComponent);
+    fixture = TestBed.createComponent(NoGroupDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
