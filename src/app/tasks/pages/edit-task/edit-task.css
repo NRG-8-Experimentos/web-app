@@ -24,7 +24,6 @@
 }
 .field textarea { min-height: 110px; resize: vertical; }
 
-/* ====== Select con avatar (idéntico a crear-tarea) ====== */
 .w-full { width:100%; }
 
 .trigger {
@@ -44,12 +43,10 @@
 .opt .avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
 .opt .opt-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
 
-/* Fix del “palito” del notch solo aquí */
 :host ::ng-deep .assignee-field .mdc-notched-outline__notch {
   border-right: 0 !important;
 }
 
-/* Botones */
 .actions {
   display: flex;
   gap: 16px;

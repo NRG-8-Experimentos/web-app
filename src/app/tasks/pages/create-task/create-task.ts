@@ -34,7 +34,6 @@ export class CreateTaskComponent implements OnInit {
   loadingMembers = false;
   saving = false;
 
-  // Avatar por defecto (SVG embebido) para cuando no hay foto
   readonly defaultAvatar =
       'data:image/svg+xml;utf8,' +
       encodeURIComponent(

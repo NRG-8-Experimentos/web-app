@@ -22,19 +22,16 @@ export class EditTaskComponent {
 
   taskId!: number;
 
-  // Campos editables
   title = '';
   description = '';
   memberId: number | undefined;
   dueDateTime = ''; // YYYY-MM-DDTHH:mm para <input type="datetime-local">
 
-  // Miembros (para el dropdown)
   members: GroupMember[] = [];
   loading = true;
   loadingMembers = true;
   saving = false;
 
-  // Avatar por defecto para cuando no hay foto
   readonly defaultAvatar =
       'data:image/svg+xml;utf8,' +
       encodeURIComponent(
@@ -56,14 +53,12 @@ export class EditTaskComponent {
       return;
     }
 
-    // Cargar tarea
     this.api.getById(this.taskId).subscribe({
       next: (t: Task) => {
         this.title = t.title ?? '';
         this.description = t.description ?? '';
         this.memberId = t.member?.id ?? (t as any).memberId;
 
-        // Convertir dueDate (ISO/OffsetDateTime) a datetime-local (YYYY-MM-DDTHH:mm)
         if (t.dueDate) {
           const d = new Date(t.dueDate);
           const pad = (n: number) => n.toString().padStart(2, '0');
@@ -85,7 +80,6 @@ export class EditTaskComponent {
       }
     });
 
-    // Cargar miembros (para el dropdown)
     this.api.getGroupMembers().subscribe({
       next: (list) => {
         this.members = list ?? [];
@@ -98,7 +92,6 @@ export class EditTaskComponent {
     });
   }
 
-  // Para el trigger del select
   get selectedMember(): GroupMember | undefined {
     return this.members.find(m => m.id === this.memberId);
   }
@@ -120,7 +113,6 @@ export class EditTaskComponent {
 
     this.saving = true;
 
-    // Enviar ISO para OffsetDateTime del backend
     const dueISO = new Date(this.dueDateTime).toISOString();
 
     const payload = {

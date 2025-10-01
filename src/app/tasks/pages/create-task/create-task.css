@@ -11,9 +11,8 @@
 
 .w-full { width:100%; }
 
-/* ====== Select con avatar ====== */
 .trigger {
-  display:inline-flex;          /* evita que ocupe todo el ancho */
+  display:inline-flex;
   align-items:center; gap:8px;
   vertical-align:middle;
 }
@@ -21,16 +20,13 @@
 .trigger .trigger-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 280px; }
 .muted { color:#6b7280; }
 
-/* evita cursor/selección dentro del trigger */
 .no-pointer { pointer-events:none; }
 .no-select { user-select:none; }
 
-/* Opciones del panel */
 .opt { display:flex; align-items:center; gap:10px; }
 .opt .avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
 .opt .opt-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
 
-/* datetime-local */
 .dt-field { display:flex; flex-direction:column; gap:6px; }
 .dt-field label { font-weight:700; }
 .dt-field input[type="datetime-local"] {
@@ -38,11 +34,9 @@
   border-radius:12px; padding:12px 14px; outline:none; box-shadow: 0 1px 2px rgba(0,0,0,.03);
 }
 
-/* Botones */
 .create .actions { display:flex; gap:16px; align-items:center; margin-top:6px; }
 .btn-save, .btn-cancel { border-radius:10px; padding:10px 18px; font-weight:700; }
 
-/* ===== Fix visual del “palito” (borde de la muesca) SOLO en este campo ===== */
 :host ::ng-deep .assignee-field .mdc-notched-outline__notch {
-  border-right: 0 !important;  /* quita el borde vertical interno */
+  border-right: 0 !important;
 }
