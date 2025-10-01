@@ -7,18 +7,23 @@ import {MemberGroup} from '@app/groups/model/member-group.entity';
 @Injectable({
   providedIn: 'root'
 })
-export class MemberGroupService extends BaseApiService<Group>{
+export class MemberGroupService extends BaseApiService<Group> {
   constructor() {
     super();
-    this.resourceEndPoint = '/member';
+    this.resourceEndPoint = '/members'; // plural según API
   }
 
   getMemberGroup(): Observable<MemberGroup> {
     return this.http.get<MemberGroup>(`${this.resourcePath()}/group`, this.httpOptions).pipe(
       retry(2),
       catchError(this.handleError)
-    )
+    );
   }
 
-
+  getMemberTasks(memberId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.resourcePath()}/${memberId}/tasks`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
 }
