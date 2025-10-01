@@ -1,5 +1,5 @@
 
-export class Group {
+export class CreateGroupResponse {
   id: number;
   name: string;
   imgUrl: string;
