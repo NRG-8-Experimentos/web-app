@@ -1,31 +1,48 @@
-.create {
-  border:1px dashed #cfd4dc; border-radius:16px; padding:16px; margin-bottom:16px;
-  background:#fafbfc;
-}
+.create { border:1px dashed #cfd4dc; border-radius:16px; padding:16px; margin-bottom:16px; background:#fafbfc; }
 .create h3 { margin:0 0 10px 0; font-size:1.25rem; font-weight:700; }
-
-.create .grid {
-  display:grid; gap:12px;
-  grid-template-columns: 1fr;
-}
+.create .grid { display:grid; gap:12px; grid-template-columns: 1fr; }
 
 .create input, .create textarea {
   width:100%; background:#fff; color:#111827; border:1px solid #d6d6d6;
-  border-radius:12px; padding:12px 14px; outline:none;
-  box-shadow: 0 1px 2px rgba(0,0,0,.03);
+  border-radius:12px; padding:12px 14px; outline:none; box-shadow: 0 1px 2px rgba(0,0,0,.03);
 }
 .create textarea { min-height: 110px; resize: vertical; }
 .create input::placeholder, .create textarea::placeholder { color:#9ca3af; }
 
-.create .actions { display:flex; gap:16px; align-items:center; margin-top: 6px; }
+.w-full { width:100%; }
 
-.btn-save, .btn-cancel {
-  border:none; border-radius:10px; padding:10px 18px; font-weight:700; color:#fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,.08); cursor:pointer;
-  transition: transform .05s ease, box-shadow .15s ease, opacity .15s ease;
+/* ====== Select con avatar ====== */
+.trigger {
+  display:inline-flex;          /* evita que ocupe todo el ancho */
+  align-items:center; gap:8px;
+  vertical-align:middle;
+}
+.trigger .avatar { width:22px; height:22px; border-radius:50%; object-fit:cover; }
+.trigger .trigger-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 280px; }
+.muted { color:#6b7280; }
+
+/* evita cursor/selección dentro del trigger */
+.no-pointer { pointer-events:none; }
+.no-select { user-select:none; }
+
+/* Opciones del panel */
+.opt { display:flex; align-items:center; gap:10px; }
+.opt .avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
+.opt .opt-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+
+/* datetime-local */
+.dt-field { display:flex; flex-direction:column; gap:6px; }
+.dt-field label { font-weight:700; }
+.dt-field input[type="datetime-local"] {
+  width:100%; background:#fff; color:#111827; border:1px solid #d6d6d6;
+  border-radius:12px; padding:12px 14px; outline:none; box-shadow: 0 1px 2px rgba(0,0,0,.03);
 }
 
-.btn-save { background:#22c55e; }
-.btn-save:hover { transform:translateY(-1px); box-shadow:0 4px 10px rgba(34,197,94,.3); }
-.btn-cancel { background:#ef4444; }
-.btn-cancel:hover { transform:translateY(-1px); box-shadow:0 4px 10px rgba(239,68,68,.3); }
+/* Botones */
+.create .actions { display:flex; gap:16px; align-items:center; margin-top:6px; }
+.btn-save, .btn-cancel { border-radius:10px; padding:10px 18px; font-weight:700; }
+
+/* ===== Fix visual del “palito” (borde de la muesca) SOLO en este campo ===== */
+:host ::ng-deep .assignee-field .mdc-notched-outline__notch {
+  border-right: 0 !important;  /* quita el borde vertical interno */
+}

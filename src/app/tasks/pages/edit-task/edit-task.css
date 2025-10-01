@@ -24,6 +24,32 @@
 }
 .field textarea { min-height: 110px; resize: vertical; }
 
+/* ====== Select con avatar (idéntico a crear-tarea) ====== */
+.w-full { width:100%; }
+
+.trigger {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  vertical-align:middle;
+}
+.trigger .avatar { width:22px; height:22px; border-radius:50%; object-fit:cover; }
+.trigger .trigger-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 280px; }
+.muted { color:#6b7280; }
+
+.no-pointer { pointer-events:none; }
+.no-select { user-select:none; }
+
+.opt { display:flex; align-items:center; gap:10px; }
+.opt .avatar { width:24px; height:24px; border-radius:50%; object-fit:cover; }
+.opt .opt-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+
+/* Fix del “palito” del notch solo aquí */
+:host ::ng-deep .assignee-field .mdc-notched-outline__notch {
+  border-right: 0 !important;
+}
+
+/* Botones */
 .actions {
   display: flex;
   gap: 16px;
@@ -39,6 +65,5 @@
 }
 .btn .icon { width: 18px; height: 18px; fill: #fff; }
 .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,0,0,.18); }
-
 .btn-save { background: #22c55e; }
 .btn-cancel { background: #ef4444; }

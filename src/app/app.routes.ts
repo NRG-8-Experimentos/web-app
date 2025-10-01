@@ -21,6 +21,7 @@ import {MembersLeaderComponent} from '@app/groups/pages/members-leader/members-l
 import {CreateTaskComponent} from '@app/tasks/pages/create-task/create-task';
 import {EditTaskComponent} from '@app/tasks/pages/edit-task/edit-task';
 import {ViewTaskComponent} from '@app/tasks/pages/view-task/view-task';
+import {CommentTaskComponent} from '@app/tasks/pages/comment-task/comment-task';
 
 export const routes: Routes = [
   {path: '', component: MainComponent, canActivate:[authGuard]},
@@ -40,6 +41,7 @@ export const routes: Routes = [
   { path: 'leaders/my-group/tasks/:id/edit', component: EditTaskComponent },
   { path: 'leaders/my-group/tasks/:id', component: ViewTaskComponent },
   { path: 'members/my-group/tasks/:id', component: ViewTaskComponent },
+  { path: 'members/my-group/tasks/:id/comment', component: CommentTaskComponent },
 
 
   { path: 'leaders/my-group/analytics', component: AnalyticsLeaderPageComponent },

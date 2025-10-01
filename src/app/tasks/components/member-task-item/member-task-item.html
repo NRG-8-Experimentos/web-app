@@ -1,6 +1,7 @@
 <article class="card card--clickable" (click)="open()">
   <header class="card__head">
     <h3>{{ task.title }}</h3>
+    <span class="badge">{{ task.status }}</span>
   </header>
 
   <div class="divider"></div>
@@ -20,7 +21,11 @@
   </div>
 
   <footer class="actions">
-    <button type="button" class="btn btn-comment" (click)="markInProgress($event)">Enviar un comentario</button>
-    <button type="button" class="btn btn-done" (click)="markDone($event)">Marcar como completada</button>
+    <button type="button" class="btn btn-comment" (click)="$event.stopPropagation(); goComment()">
+      Enviar un comentario
+    </button>
+    <button type="button" class="btn btn-done" (click)="$event.stopPropagation(); markDone()">
+      Marcar como completada
+    </button>
   </footer>
 </article>

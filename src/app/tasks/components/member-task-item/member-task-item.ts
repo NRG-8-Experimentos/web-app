@@ -39,7 +39,7 @@ export class MemberTaskItemComponent implements OnChanges {
 
   get progressClass(): 'ok' | 'warn' | 'late' | 'unknown' {
     const dueMs   = this.task?.dueDate   ? new Date(this.task.dueDate).getTime()   : NaN;
-    const startMs = this.task?.createdAt ? new Date(this.task.createdAt).getTime() : NaN;
+    const startMs = this.task?.createdAt ? new Date(this.task.createdAt!).getTime() : NaN;
     if (isNaN(dueMs)) return 'unknown';
     const start = isNaN(startMs) ? Date.now() : startMs;
     const end   = dueMs;
@@ -54,13 +54,11 @@ export class MemberTaskItemComponent implements OnChanges {
     this.router.navigate(['/members/my-group/tasks', this.task.id], { state: { from: 'member' } });
   }
 
-  markInProgress(ev?: Event) {
-    ev?.stopPropagation();
-    this.api.updateStatus(this.task.id, TaskStatus.IN_PROGRESS).subscribe({ next: () => this.changed.emit() });
+  goComment() {
+    this.router.navigate(['/members/my-group/tasks', this.task.id, 'comment']);
   }
 
-  markDone(ev?: Event) {
-    ev?.stopPropagation();
+  markDone() {
     this.api.updateStatus(this.task.id, TaskStatus.DONE).subscribe({ next: () => this.changed.emit() });
   }
 }

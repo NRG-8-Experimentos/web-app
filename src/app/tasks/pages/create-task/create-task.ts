@@ -1,54 +1,99 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TasksApiService } from '../../services/tasks-api.service';
+import { TasksApiService, GroupMember } from '../../services/tasks-api.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-create-task',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './create-task.html',
   styleUrls: ['./create-task.css']
 })
-export class CreateTaskComponent {
+export class CreateTaskComponent implements OnInit {
   title = '';
   description = '';
-  dueDate = '';
-  memberId?: number;
+  dueDateTime = '';
+  memberId: number | undefined;
+
+  members: GroupMember[] = [];
+  loadingMembers = false;
+  saving = false;
+
+  // Avatar por defecto (SVG embebido) para cuando no hay foto
+  readonly defaultAvatar =
+      'data:image/svg+xml;utf8,' +
+      encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+         <defs><clipPath id="c"><circle cx="32" cy="32" r="32"/></clipPath></defs>
+         <g clip-path="url(#c)">
+           <rect width="64" height="64" fill="#e5e7eb"/>
+           <circle cx="32" cy="24" r="12" fill="#cbd5e1"/>
+           <rect x="6" y="40" width="52" height="28" rx="14" fill="#cbd5e1"/>
+         </g>
+       </svg>`
+      );
 
   private router = inject(Router);
   private api = inject(TasksApiService);
 
-  saving = false;
+  ngOnInit(): void {
+    this.loadingMembers = true;
+    this.api.getGroupMembers().subscribe({
+      next: (list) => {
+        this.members = list ?? [];
+        this.loadingMembers = false;
+      },
+      error: () => {
+        this.loadingMembers = false;
+        alert('No se pudieron cargar los miembros del grupo.');
+      }
+    });
+  }
+
+  // Miembro actualmente seleccionado (para el trigger del select)
+  get selectedMember(): GroupMember | undefined {
+    return this.members.find(m => m.id === this.memberId);
+  }
 
   save() {
     if (!this.title.trim()) {
       alert('El título es obligatorio.');
       return;
     }
-    if (!this.dueDate) {
-      alert('La fecha de vencimiento es obligatoria.');
+    if (!this.dueDateTime) {
+      alert('La fecha y hora de vencimiento son obligatorias.');
       return;
     }
 
     this.saving = true;
 
-    const dateISO = new Date(`${this.dueDate}T00:00:00`).toISOString();
-
+    const iso = new Date(this.dueDateTime).toISOString();
 
     const payload = {
       title: this.title.trim(),
       description: this.description?.trim() || undefined,
-      dueDate: dateISO,
-      memberId: this.memberId ?? undefined,
+      dueDate: iso,
+      memberId: this.memberId ?? undefined
     };
-
 
     this.api.createTask(payload).subscribe({
       next: () => this.router.navigate(['/leaders/my-group/tasks']),
-      error: (err) => {
-        console.error('Error creando tarea', err);
+      error: () => {
         alert('No se pudo crear la tarea. Intenta nuevamente.');
         this.saving = false;
       }
@@ -57,5 +102,13 @@ export class CreateTaskComponent {
 
   cancel() {
     this.router.navigate(['/leaders/my-group/tasks']);
+  }
+
+  imgFor(m?: GroupMember): string {
+    return (m?.urlImage && m.urlImage.trim().length > 0) ? m.urlImage : this.defaultAvatar;
+  }
+
+  memberLabel(m: GroupMember) {
+    return `${m.name} ${m.surname}`.trim();
   }
 }
