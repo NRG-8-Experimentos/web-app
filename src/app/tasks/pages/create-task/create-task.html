@@ -1,0 +1,16 @@
+<section class="create">
+  <h3>Crear tarea</h3>
+
+  <div class="grid">
+    <input placeholder="Título" [(ngModel)]="title" />
+    <textarea rows="2" placeholder="Descripción" [(ngModel)]="description"></textarea>
+    <input type="number" placeholder="Member ID (opcional)" [(ngModel)]="memberId" />
+
+    <input type="date" [(ngModel)]="dueDate" />
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn-save" (click)="save()">Guardar</button>
+    <button type="button" class="btn-cancel" (click)="cancel()">Cancelar</button>
+  </div>
+</section>
