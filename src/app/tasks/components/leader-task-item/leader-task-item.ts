@@ -1,13 +1,15 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Task, TaskStatus } from '../../model/task.model';
 import { TasksApiService } from '../../services/tasks-api.service';
+import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog';
 
 @Component({
   selector: 'leader-task-item',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './leader-task-item.html',
   styleUrls: ['./leader-task-item.css']
 })
@@ -17,6 +19,7 @@ export class LeaderTaskItemComponent {
 
   protected api = inject(TasksApiService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   open() {
     this.router.navigate(['/leaders/my-group/tasks', this.task.id]);
@@ -27,10 +30,18 @@ export class LeaderTaskItemComponent {
     this.router.navigate(['/leaders/my-group/tasks', this.task.id, 'edit']);
   }
 
-  remove(ev?: Event) {
+  confirmRemove(ev?: Event) {
     ev?.stopPropagation();
-    this.api.deleteTask(this.task.id).subscribe({
-      next: () => this.changed.emit()
+    const ref = this.dialog.open(ConfirmDeleteDialogComponent, {
+      data: {
+        title: 'Delete Task',
+        message: `Are you sure you want to delete "${this.task.title}"?`
+      }
+    });
+    ref.afterClosed().subscribe(yes => {
+      if (yes) {
+        this.api.deleteTask(this.task.id).subscribe({ next: () => this.changed.emit() });
+      }
     });
   }
 
@@ -65,7 +76,7 @@ export class LeaderTaskItemComponent {
 
     const total = end - start;
     const elapsed = now - start;
-    const ratio = elapsed / total; // 0..1
+    const ratio = elapsed / total;
 
     return ratio < 0.7 ? 'ok' : 'warn';
   }

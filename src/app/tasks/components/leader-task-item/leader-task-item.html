@@ -31,7 +31,6 @@
     <small class="muted" *ngIf="task.dueDate">
       Vence: {{ task.dueDate | date:'mediumDate':'UTC' }}
     </small>
-
   </div>
 
   <footer class="actions actions--primary">
@@ -42,13 +41,11 @@
       Editar
     </button>
 
-    <button type="button" class="btn btn--danger" (click)="remove($event)">
+    <button type="button" class="btn btn--danger" (click)="confirmRemove($event)">
       <svg viewBox="0 0 24 24" aria-hidden="true" class="btn__icon">
         <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1z"/>
       </svg>
       Borrar
     </button>
   </footer>
-
-
 </article>
