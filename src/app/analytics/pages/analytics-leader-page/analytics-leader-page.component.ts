@@ -32,6 +32,7 @@ export class AnalyticsLeaderPageComponent implements OnInit {
 
   membersWithRescheduled: any[] = [];
   avgCompletionMembers: any[] = [];
+  inProgressDurationsMembers: { name: string, surname: string, imgUrl: string, totalInProgress: number }[] = [];
 
   ngOnInit(): void {
     this.loading = true;
@@ -60,6 +61,8 @@ export class AnalyticsLeaderPageComponent implements OnInit {
         let avgCompletionCount = 0;
         let rescheduledSum = 0;
         let timePassedSumMs = 0;
+
+        this.inProgressDurationsMembers = [];
 
         const metricPromises = members.map(async (member: any) => {
           const memberId = member.id;
@@ -110,6 +113,28 @@ export class AnalyticsLeaderPageComponent implements OnInit {
 
           const timePassedData = await this.analyticsService.getTaskTimePassedForMember(memberId).toPromise().catch(() => ({}));
           timePassedSumMs += timePassedData?.timePassed ?? 0;
+
+          // Calcular tiempo total de tareas IN_PROGRESS para el miembro
+          const memberTasksInProgress = await this.memberService.getTasksForMember(memberId).toPromise().catch(() => []);
+          let totalInProgress = 0;
+          if (Array.isArray(memberTasksInProgress)) {
+            const inProgressTasks = memberTasksInProgress.filter((t: any) => t.status === 'IN_PROGRESS');
+            if (inProgressTasks.length > 0) {
+              const durations = await Promise.all(
+                inProgressTasks.map(async (task: any) => {
+                  const data = await this.analyticsService.getInProgressTaskDuration(task.id).toPromise().catch(() => null);
+                  return data && typeof data.durationInHours === 'number' ? data.durationInHours : 0;
+                })
+              );
+              totalInProgress = durations.reduce((a, b) => a + b, 0);
+            }
+          }
+          this.inProgressDurationsMembers.push({
+            name: member.name,
+            surname: member.surname,
+            imgUrl: member.imgUrl,
+            totalInProgress
+          });
         });
 
         await Promise.all(metricPromises);
@@ -133,5 +158,26 @@ export class AnalyticsLeaderPageComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  formatInProgressDuration(hours: number): string {
+    if (hours < 1) {
+      const mins = Math.round(hours * 60);
+      return `${mins} minutos`;
+    }
+    const days = Math.floor(hours / 24);
+    const remHours = Math.floor(hours % 24);
+    let result = '';
+    if (days > 0) {
+      result += `${days} ${days === 1 ? 'día' : 'días'}`;
+    }
+    if (remHours > 0) {
+      if (result.length > 0) result += ' ';
+      result += `${remHours} ${remHours === 1 ? 'hora' : 'horas'}`;
+    }
+    if (result === '') {
+      result = '0 horas';
+    }
+    return result;
   }
 }
