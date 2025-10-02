@@ -1,3 +1,13 @@
+.analytics-leader-screen {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 40px 48px;
+  background: #f5f5f5;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(26, 78, 133, 0.07);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+}
+
 .enhanced-section {
   background: #f8fafc;
   border-radius: 12px;
@@ -7,8 +17,17 @@
   border: 1px solid #e2e8f0;
 }
 
+.section-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 1px 8px rgba(26, 78, 133, 0.08);
+  margin-bottom: 28px;
+  padding: 24px 28px;
+  border: 2px solid #e0e0e0;
+}
+
 .section-title {
-  font-size: 1.5rem;
+  font-size: 1.5rem; /* igual que analytics-member */
   font-weight: 700;
   color: #1e293b;
   display: flex;
@@ -23,12 +42,22 @@
   margin: 24px 0;
 }
 
-.metrics-row {
+.metrics-row,
+.metric-row {
   display: flex;
   gap: 36px;
   margin-bottom: 24px;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+/* Si usas spaced-row, igual que en member */
+.spaced-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
 }
 
 .stat-card {
@@ -74,10 +103,11 @@
   font-size: 1.1rem;
 }
 
+/* --- CORRECCIÓN: nombre junto a foto, sin separación por spaced-row --- */
 .member-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 20px; /* igual que member */
   margin-bottom: 12px;
   font-size: 1.12rem;
 }
@@ -87,13 +117,31 @@
   color: #334155;
 }
 
-.profile-image {
+.member-username {
+  color: #555;
+  font-size: 1rem;
+  margin-left: 8px;
+}
+
+.member-email {
+  color: #555;
+  font-size: 1rem;
+  margin-left: 8px;
+}
+
+.profile-image,
+.avatar {
   width: 52px;
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e2e8f0;
   margin-right: 8px;
+}
+
+.default-avatar {
+  font-size: 36px;
+  color: #1a4e85;
 }
 
 .bar-chart-row {
@@ -154,47 +202,208 @@
   font-size: 1.12rem;
 }
 
-.metric-value {
-  font-weight: 600;
-  color: #2563eb;
-  margin-left: 16px;
-  font-size: 1.12rem;
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 240px;
+  overflow-y: auto;
 }
 
-.two-column-layout {
+.task-index {
+  font-weight: bold;
+  color: #1a4e85;
+  margin-right: 10px;
+}
+
+.task-title {
+  font-size: 16px;
+  color: #222;
+}
+
+.loading-tasks {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Métricas mejoradas --- */
+.metric-enhanced {
+  padding: 28px 32px 24px 32px;
+  margin-bottom: 32px;
+}
+
+.metric-icon-title {
   display: flex;
-  gap: 40px;
+  align-items: center;
+  gap: 28px;
+  justify-content: flex-start;
   flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.metric-title-label-col {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
-.analytics-column {
-  flex: 1 1 520px;
-  min-width: 400px;
-  max-width: 700px;
+.metric-icon {
+  font-size: 2.6rem !important;
+  color: #2563eb;
+  background: #e0e7ff;
+  border-radius: 50%;
+  padding: 14px;
+  margin-right: 18px;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.08);
+  min-width: 56px;
+  min-height: 56px;
   display: flex;
-  flex-direction: column;
-  gap: 36px;
+  align-items: center;
+  justify-content: center;
 }
 
-.analytics-leader-screen {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 56px 48px 40px 48px;
-  box-sizing: border-box;
+.metric-title {
+  font-size: 1.25rem; /* igual que analytics-member */
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 2px;
 }
 
-@media (max-width: 1100px) {
-  .two-column-layout {
+.metric-label {
+  font-size: 1.05rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.metric-value-box {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.metric-value {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-right: 2px;
+}
+
+.metric-unit {
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.metric-icon.timer {
+  font-size: 1.5rem !important;
+  color: #64748b;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-right: 6px;
+  min-width: unset;
+  min-height: unset;
+}
+
+.metric-icon.build { color: #f59e42; background: #fff7ed; }
+.metric-icon.date_range { color: #14b8a6; background: #ecfdf5; }
+.metric-icon.hourglass_top { color: #3b82f6; background: #eff6ff; }
+.metric-icon.schedule { color: #a21caf; background: #f3e8ff; }
+.metric-icon.info { color: #2563eb; background: #e0e7ff; }
+.metric-icon.list_alt { color: #f59e42; background: #fff7ed; }
+
+.progress-list {
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 1.08rem;
+}
+
+.progress-task-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  font-weight: 500;
+}
+
+.progress-profile-image {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+  margin-right: 8px;
+}
+
+.progress-task-duration {
+  background: #e0e7ff;
+  color: #3730a3;
+  border-radius: 8px;
+  padding: 5px 16px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-left: 10px;
+  min-width: 110px;
+  text-align: right;
+}
+
+@media (max-width: 700px) {
+  .metric-icon-title {
     flex-direction: column;
-    gap: 0;
+    align-items: flex-start;
+    gap: 16px;
   }
-  .analytics-column {
-    max-width: 100%;
-    width: 100%;
-    margin-bottom: 36px;
+  .progress-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
-  .analytics-leader-screen {
-    padding: 32px 8px 16px 8px;
+  .progress-task-duration {
+    margin-left: 0;
+    margin-top: 4px;
   }
+}
+
+/* Dos columnas para miembro: info a la izquierda, valor a la derecha */
+.two-col-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.member-value {
+  display: flex;
+  align-items: center;
+  min-width: 110px;
+  justify-content: flex-end;
+}
+
+/* Tamaño de letra menor para valores propios del miembro en métricas */
+.member-metric-value {
+  font-size: 1.1rem;
+  font-weight: 500;
 }
