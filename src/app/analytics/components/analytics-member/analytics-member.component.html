@@ -1,8 +1,13 @@
 <div class="analytics-member-screen">
-  <div class="section-card enhanced-section">
-    <div class="section-title">
-      <span class="material-icons">info</span>
-      <span>Resumen General</span>
+
+  <!-- Resumen General -->
+  <div class="section-card enhanced-section metric-enhanced">
+    <div class="metric-icon-title">
+      <span class="metric-icon material-icons info">info</span>
+      <div class="metric-title-label-col">
+        <div class="metric-title">Resumen General</div>
+        <div class="metric-label">Estado de las tareas</div>
+      </div>
     </div>
     <div class="metrics-row">
       <div class="stat-card green">
@@ -40,10 +45,14 @@
     </div>
   </div>
 
-  <div class="section-card enhanced-section">
-    <div class="section-title">
-      <span class="material-icons">list_alt</span>
-      <span>Distribución de Tareas</span>
+  <!-- Distribución de Tareas -->
+  <div class="section-card enhanced-section metric-enhanced">
+    <div class="metric-icon-title">
+      <span class="metric-icon material-icons list_alt">list_alt</span>
+      <div class="metric-title-label-col">
+        <div class="metric-title">Distribución de Tareas</div>
+        <div class="metric-label">Listado y total</div>
+      </div>
     </div>
     <div *ngIf="loadingTasks" class="loading-tasks">
       <span class="material-icons spin">autorenew</span>
@@ -70,28 +79,70 @@
     </div>
   </div>
 
-  <div class="section-card enhanced-section">
-    <div class="section-title">
-      <span class="material-icons">build</span>
-      <span>Cantidad total de reprogramaciones</span>
-    </div>
-    <div class="metric-row">
-      <span>Reprogramadas</span>
-      <span class="metric-value badge">
-        {{ rescheduled?.rescheduled ?? 0 }} {{ (rescheduled?.rescheduled ?? 0) === 1 ? 'tarea' : 'tareas' }}
-      </span>
+  <!-- Cantidad total de reprogramaciones -->
+  <div class="section-card enhanced-section metric-enhanced">
+    <div class="metric-icon-title">
+      <span class="metric-icon material-icons build">build</span>
+      <div class="metric-title-label-col">
+        <div class="metric-title">Cantidad total de reprogramaciones</div>
+        <div class="metric-label">Reprogramadas</div>
+      </div>
+      <div class="metric-value-box">
+        <span class="metric-value">
+          {{ rescheduled?.rescheduled ?? 0 }}
+        </span>
+        <span class="metric-unit">
+          {{ (rescheduled?.rescheduled ?? 0) === 1 ? 'tarea' : 'tareas' }}
+        </span>
+      </div>
     </div>
   </div>
 
-  <div class="section-card enhanced-section">
-    <div class="section-title">
-      <span class="material-icons">date_range</span>
-      <span>Tiempo Promedio de Finalización</span>
+  <!-- Tiempo Promedio de Finalización -->
+  <div class="section-card enhanced-section metric-enhanced">
+    <div class="metric-icon-title">
+      <span class="metric-icon material-icons date_range">date_range</span>
+      <div class="metric-title-label-col">
+        <div class="metric-title">Tiempo Promedio de Finalización</div>
+        <div class="metric-label">Duración promedio</div>
+      </div>
+      <div class="metric-value-box">
+        <span class="metric-icon material-icons timer">timer</span>
+        <span class="metric-value">
+          {{ formatAvgCompletionTime(avgCompletion?.avgDays ?? 0) }}
+        </span>
+      </div>
     </div>
-    <div class="metric-row">
-      <span class="material-icons">timer</span>
-      <span class="metric-value badge">
-        {{ formatAvgCompletionTime(avgCompletion?.avgDays ?? 0) }}
+  </div>
+
+  <!-- Tiempo de Tareas en Progreso -->
+  <div class="section-card enhanced-section metric-enhanced">
+    <div class="metric-icon-title">
+      <span class="metric-icon material-icons hourglass_top">hourglass_top</span>
+      <div class="metric-title-label-col">
+        <div class="metric-title">Tiempo de Tareas en Progreso</div>
+        <div class="metric-label">Duración individual y total</div>
+      </div>
+    </div>
+    <div *ngIf="inProgressTaskDurations.length === 0" class="empty-section">
+      No hay tareas en progreso.
+    </div>
+    <ul *ngIf="inProgressTaskDurations.length > 0" class="tasks-list progress-list">
+      <li *ngFor="let t of inProgressTaskDurations" class="progress-row">
+        <span class="progress-task-title">
+          <span class="material-icons progress-task-icon">assignment</span>
+          {{ t.title }}
+        </span>
+        <span class="progress-task-duration">
+          {{ formatInProgressDuration(t.duration) }}
+        </span>
+      </li>
+    </ul>
+    <div class="progress-total-row">
+      <span class="material-icons schedule">schedule</span>
+      <span class="progress-total-label">Total:</span>
+      <span class="progress-total-value">
+        {{ formatInProgressDuration(totalInProgressDuration) }}
       </span>
     </div>
   </div>

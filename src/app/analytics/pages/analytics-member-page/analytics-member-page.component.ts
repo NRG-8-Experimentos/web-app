@@ -23,6 +23,8 @@ export class AnalyticsMemberPageComponent {
   memberTasks: any[] = [];
   rescheduled: any = {};
   avgCompletion: any = {};
+  totalInProgressDuration: number = 0;
+  inProgressTaskDurations: { taskId: number, title: string, duration: number }[] = [];
 
   private getData() {
     this.detailsService.getMemberDetails().subscribe((response: Member) => {
@@ -37,6 +39,38 @@ export class AnalyticsMemberPageComponent {
         this.overview.done = this.memberTasks.filter(t => t.status === 'DONE').length;
         this.overview.overdue = this.memberTasks.filter(t => t.status === 'EXPIRED').length;
         this.loadingTasks = false;
+
+        // Nueva lógica para sumar duración de tareas IN_PROGRESS y guardar cada duración
+        const inProgressTasks = this.memberTasks.filter(t => t.status === 'IN_PROGRESS');
+        this.inProgressTaskDurations = [];
+        if (inProgressTasks.length > 0) {
+          let durations: number[] = [];
+          let completed = 0;
+          this.totalInProgressDuration = 0;
+          inProgressTasks.forEach(task => {
+            this.leaderMetricsService.getInProgressTaskDuration(task.id).subscribe(data => {
+              const duration = typeof data.durationInHours === 'number' ? data.durationInHours : 0;
+              durations.push(duration);
+              this.inProgressTaskDurations.push({
+                taskId: task.id,
+                title: task.title,
+                duration
+              });
+              completed++;
+              if (completed === inProgressTasks.length) {
+                this.totalInProgressDuration = durations.reduce((a, b) => a + b, 0);
+              }
+            }, _ => {
+              completed++;
+              if (completed === inProgressTasks.length) {
+                this.totalInProgressDuration = durations.reduce((a, b) => a + b, 0);
+              }
+            });
+          });
+        } else {
+          this.totalInProgressDuration = 0;
+          this.inProgressTaskDurations = [];
+        }
       }, err => {
         this.memberTasks = [];
         this.loadingTasks = false;
@@ -58,13 +92,32 @@ export class AnalyticsMemberPageComponent {
         const minutes = avgCompletionData.value !== undefined ? Math.round(avgCompletionData.value * 24 * 60) : 0;
         this.avgCompletion = { avgDays: minutes };
       });
-    }, error => {
-      console.error('There was an error fetching member details!', error);
     });
   }
 
   formatAvgCompletionTime(minutes: number): string {
     return `${minutes} minutos`;
+  }
+
+  formatInProgressDuration(hours: number): string {
+    if (hours < 1) {
+      const mins = Math.round(hours * 60);
+      return `${mins} minutos`;
+    }
+    const days = Math.floor(hours / 24);
+    const remHours = Math.floor(hours % 24);
+    let result = '';
+    if (days > 0) {
+      result += `${days} ${days === 1 ? 'día' : 'días'}`;
+    }
+    if (remHours > 0) {
+      if (result.length > 0) result += ' ';
+      result += `${remHours} ${remHours === 1 ? 'hora' : 'horas'}`;
+    }
+    if (result === '') {
+      result = '0 horas';
+    }
+    return result;
   }
 
   ngOnInit(): void {
