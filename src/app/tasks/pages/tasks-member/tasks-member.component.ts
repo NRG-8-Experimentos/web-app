@@ -19,7 +19,7 @@ export class TasksMemberComponent {
 
   filter = signal<TaskStatus | 'ALL'>('ALL');
   TaskStatus = TaskStatus;
-  statusOptions: (TaskStatus | 'ALL')[] = ['ALL', TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.OVERDUE];
+  statusOptions: (TaskStatus | 'ALL')[] = ['ALL', TaskStatus.ON_HOLD, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.COMPLETED, TaskStatus.EXPIRED ];
 
   filtered = computed(() => {
     const f = this.filter();
@@ -30,8 +30,9 @@ export class TasksMemberComponent {
   ngOnInit() { this.load(); }
 
   load(): void {
-    this.api.getAllStatuses().subscribe({
-      next: (data: Task[]) => this.allTasks.set(data)
+    this.api.getTasksForAuthenticatedMember().subscribe({
+      next: (data: Task[]) => this.allTasks.set(data ?? []),
+      error: () => this.allTasks.set([])
     });
   }
 }

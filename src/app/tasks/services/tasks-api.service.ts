@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map, catchError, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '@env/environment';
 
 export interface GroupMember {
   id: number;
@@ -11,10 +11,11 @@ export interface GroupMember {
 }
 
 export enum TaskStatus {
-  PENDING = 'PENDING',
+  ON_HOLD = 'ON_HOLD',
   IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
   DONE = 'DONE',
-  OVERDUE = 'OVERDUE'
+  EXPIRED = 'EXPIRED',
 }
 
 export interface TaskMember {
@@ -50,12 +51,16 @@ export class TasksApiService {
   }
 
   getAllStatuses() {
-    const statuses = [TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.OVERDUE];
+    const statuses = [TaskStatus.ON_HOLD, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.COMPLETED, TaskStatus.EXPIRED];
     return forkJoin(
       statuses.map(s =>
         this.getByStatus(s).pipe(catchError(() => of([] as Task[])))
       )
     ).pipe(map(parts => parts.flat()));
+  }
+
+  getTasksByMember(memberId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${environment.baseUrl}/members/${memberId}/tasks`);
   }
 
   createTask(payload: { title: string; description?: string; dueDate?: string; memberId?: number | null }): Observable<void> {
@@ -87,4 +92,9 @@ export class TasksApiService {
       )
     );
   }
+
+  getTasksForAuthenticatedMember(): Observable<Task[]> {
+    return this.http.get<Task[]>(`${environment.baseUrl}/member/tasks`);
+  }
+
 }

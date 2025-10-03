@@ -21,7 +21,7 @@ export class TasksLeaderComponent {
   filter = signal<TaskStatus | 'ALL'>('ALL');
   TaskStatus = TaskStatus;
   statusOptions: (TaskStatus | 'ALL')[] = [
-    'ALL', TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.OVERDUE
+    'ALL', TaskStatus.ON_HOLD, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.COMPLETED, TaskStatus.EXPIRED
   ];
 
   filtered = computed(() => {

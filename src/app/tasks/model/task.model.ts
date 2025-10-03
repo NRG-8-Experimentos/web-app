@@ -1,8 +1,9 @@
 export enum TaskStatus {
-  PENDING = 'PENDING',
+  ON_HOLD = 'ON_HOLD',
   IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
   DONE = 'DONE',
-  OVERDUE = 'OVERDUE'
+  EXPIRED = 'EXPIRED'
 }
 
 export interface TaskMember {
