@@ -37,7 +37,14 @@ export class MemberTaskItemComponent implements OnChanges {
     }
   }
 
-  get progressClass(): 'ok' | 'warn' | 'late' | 'unknown' {
+  get progressClass(): 'ok' | 'warn' | 'late' | 'unknown' | 'hold' | 'done' {
+    const status = this.task?.status;
+
+    if (status === TaskStatus.ON_HOLD) return 'hold';
+    if (status === TaskStatus.DONE) return 'done';
+    if (status === TaskStatus.COMPLETED) return 'ok';
+    if (status === TaskStatus.EXPIRED) return 'late';
+
     const dueMs   = this.task?.dueDate   ? new Date(this.task.dueDate).getTime()   : NaN;
     const startMs = this.task?.createdAt ? new Date(this.task.createdAt!).getTime() : NaN;
     if (isNaN(dueMs)) return 'unknown';
@@ -59,6 +66,6 @@ export class MemberTaskItemComponent implements OnChanges {
   }
 
   markDone() {
-    this.api.updateStatus(this.task.id, TaskStatus.DONE).subscribe({ next: () => this.changed.emit() });
+    this.api.updateStatus(this.task.id, TaskStatus.COMPLETED).subscribe({ next: () => this.changed.emit() });
   }
 }

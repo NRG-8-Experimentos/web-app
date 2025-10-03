@@ -21,6 +21,8 @@ export class LeaderTaskItemComponent {
   private router = inject(Router);
   private dialog = inject(MatDialog);
 
+  TaskStatus = TaskStatus;
+
   open() {
     this.router.navigate(['/leaders/my-group/tasks', this.task.id]);
   }
@@ -58,26 +60,26 @@ export class LeaderTaskItemComponent {
     return ini.toUpperCase() || 'U';
   }
 
-  get progressClass(): 'ok' | 'warn' | 'late' | 'unknown' {
-    const dueMs   = this.task.dueDate   ? new Date(this.task.dueDate).getTime()   : NaN;
-    const startMs = this.task.createdAt ? new Date(this.task.createdAt).getTime() : NaN;
+  get progressClass(): 'ok' | 'warn' | 'late' | 'unknown' | 'hold' | 'done' {
+    const status = this.task?.status;
 
+    if (status === TaskStatus.ON_HOLD) return 'hold';
+    if (status === TaskStatus.DONE) return 'done';
+    if (status === TaskStatus.COMPLETED) return 'ok';
+    if (status === TaskStatus.EXPIRED) return 'late';
+
+    const dueMs   = this.task?.dueDate   ? new Date(this.task.dueDate).getTime()   : NaN;
+    const startMs = this.task?.createdAt ? new Date(this.task.createdAt!).getTime() : NaN;
     if (isNaN(dueMs)) return 'unknown';
 
     const start = isNaN(startMs) ? Date.now() : startMs;
     const end   = dueMs;
-
-    if (end <= start) {
-      return Date.now() > end ? 'late' : 'unknown';
-    }
+    if (end <= start) return Date.now() > end ? 'late' : 'unknown';
 
     const now = Date.now();
     if (now > end) return 'late';
 
-    const total = end - start;
-    const elapsed = now - start;
-    const ratio = elapsed / total;
-
+    const ratio = (now - start) / (end - start);
     return ratio < 0.7 ? 'ok' : 'warn';
   }
 }
