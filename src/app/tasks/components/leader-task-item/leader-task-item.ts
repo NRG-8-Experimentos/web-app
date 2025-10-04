@@ -23,17 +23,23 @@ export class LeaderTaskItemComponent {
 
   TaskStatus = TaskStatus;
 
+  get canModify(): boolean {
+    return this.task?.status === TaskStatus.IN_PROGRESS;
+  }
+
   open() {
     this.router.navigate(['/leaders/my-group/tasks', this.task.id]);
   }
 
   edit(ev?: Event) {
     ev?.stopPropagation();
+    if (!this.canModify) return;
     this.router.navigate(['/leaders/my-group/tasks', this.task.id, 'edit']);
   }
 
   confirmRemove(ev?: Event) {
     ev?.stopPropagation();
+    if (!this.canModify) return;
     const ref = this.dialog.open(ConfirmDeleteDialogComponent, {
       data: {
         title: 'Delete Task',
@@ -48,9 +54,7 @@ export class LeaderTaskItemComponent {
   }
 
   changeStatus(status: TaskStatus) {
-    this.api.updateStatus(this.task.id, status).subscribe({
-      next: () => this.changed.emit()
-    });
+    this.api.updateStatus(this.task.id, status).subscribe({ next: () => this.changed.emit() });
   }
 
   get initials(): string {

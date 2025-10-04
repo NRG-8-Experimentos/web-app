@@ -63,8 +63,16 @@ export class TasksApiService {
     return this.http.get<Task[]>(`${environment.baseUrl}/members/${memberId}/tasks`);
   }
 
-  createTask(payload: { title: string; description?: string; dueDate?: string; memberId?: number | null }): Observable<void> {
-    return this.http.post<void>(`${this.BASE}`, payload);
+  createTaskForMember(
+    memberId: number,
+    payload: { title: string; description?: string; dueDate?: string }
+  ): Observable<void> {
+    const body = {
+      title: payload.title,
+      description: payload.description ?? undefined,
+      dueDate: payload.dueDate
+    };
+    return this.http.post<void>(`${environment.baseUrl}/members/${memberId}/tasks`, body);
   }
 
   updateTask(taskId: number, payload: { title?: string; description?: string; dueDate?: string; memberId?: number | null }): Observable<void> {
@@ -96,5 +104,4 @@ export class TasksApiService {
   getTasksForAuthenticatedMember(): Observable<Task[]> {
     return this.http.get<Task[]>(`${environment.baseUrl}/member/tasks`);
   }
-
 }

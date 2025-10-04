@@ -19,7 +19,25 @@ export class TasksMemberComponent {
 
   filter = signal<TaskStatus | 'ALL'>('ALL');
   TaskStatus = TaskStatus;
-  statusOptions: (TaskStatus | 'ALL')[] = ['ALL', TaskStatus.ON_HOLD, TaskStatus.IN_PROGRESS, TaskStatus.DONE, TaskStatus.COMPLETED, TaskStatus.EXPIRED ];
+  statusOptions: (TaskStatus | 'ALL')[] = [
+    'ALL',
+    TaskStatus.ON_HOLD,
+    TaskStatus.IN_PROGRESS,
+    TaskStatus.DONE,
+    TaskStatus.COMPLETED,
+    TaskStatus.EXPIRED
+  ];
+
+  private statusLabels: Record<TaskStatus, string> = {
+    [TaskStatus.IN_PROGRESS]: 'en progreso',
+    [TaskStatus.DONE]: 'terminado',
+    [TaskStatus.COMPLETED]: 'completado',
+    [TaskStatus.EXPIRED]: 'vencido',
+    [TaskStatus.ON_HOLD]: 'en espera'
+  };
+  labelFor(s: TaskStatus | 'ALL'): string {
+    return s === 'ALL' ? 'todos' : this.statusLabels[s];
+  }
 
   filtered = computed(() => {
     const f = this.filter();

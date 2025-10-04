@@ -16,12 +16,11 @@
               <span class="trigger-text">{{ memberLabel(selectedMember!) }}</span>
             </ng-container>
             <ng-template #noneTpl>
-              <span class="muted">Sin asignar</span>
+              <span class="muted">Selecciona un miembro</span>
             </ng-template>
           </span>
         </mat-select-trigger>
 
-        <mat-option [value]="undefined">Sin asignar</mat-option>
         <mat-option *ngFor="let m of members" [value]="m.id">
           <div class="opt">
             <img class="avatar" [src]="imgFor(m)" alt="avatar miembro" />

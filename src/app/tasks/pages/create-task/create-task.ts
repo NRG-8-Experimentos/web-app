@@ -35,9 +35,9 @@ export class CreateTaskComponent implements OnInit {
   saving = false;
 
   readonly defaultAvatar =
-      'data:image/svg+xml;utf8,' +
-      encodeURIComponent(
-          `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+    'data:image/svg+xml;utf8,' +
+    encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
          <defs><clipPath id="c"><circle cx="32" cy="32" r="32"/></clipPath></defs>
          <g clip-path="url(#c)">
            <rect width="64" height="64" fill="#e5e7eb"/>
@@ -45,7 +45,7 @@ export class CreateTaskComponent implements OnInit {
            <rect x="6" y="40" width="52" height="28" rx="14" fill="#cbd5e1"/>
          </g>
        </svg>`
-      );
+    );
 
   private router = inject(Router);
   private api = inject(TasksApiService);
@@ -64,7 +64,6 @@ export class CreateTaskComponent implements OnInit {
     });
   }
 
-  // Miembro actualmente seleccionado (para el trigger del select)
   get selectedMember(): GroupMember | undefined {
     return this.members.find(m => m.id === this.memberId);
   }
@@ -78,19 +77,20 @@ export class CreateTaskComponent implements OnInit {
       alert('La fecha y hora de vencimiento son obligatorias.');
       return;
     }
+    if (!this.memberId) {
+      alert('Debes seleccionar un miembro para asignar la tarea.');
+      return;
+    }
 
     this.saving = true;
 
     const iso = new Date(this.dueDateTime).toISOString();
 
-    const payload = {
+    this.api.createTaskForMember(this.memberId, {
       title: this.title.trim(),
       description: this.description?.trim() || undefined,
-      dueDate: iso,
-      memberId: this.memberId ?? undefined
-    };
-
-    this.api.createTask(payload).subscribe({
+      dueDate: iso
+    }).subscribe({
       next: () => this.router.navigate(['/leaders/my-group/tasks']),
       error: () => {
         alert('No se pudo crear la tarea. Intenta nuevamente.');
