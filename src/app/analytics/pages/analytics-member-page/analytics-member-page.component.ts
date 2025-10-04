@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DetailsService } from '../../../shared/services/details.service';
-import { Member } from '../../../shared/model/member.entity';
+import { DetailsService } from '@app/shared/services/details.service';
+import { Member } from '@app/shared/model/member.entity';
 import { AnalyticsLeaderApiService } from '../../services/analytics-leader-api.service';
 import { AnalyticsMemberComponent } from '../../components/analytics-member/analytics-member.component';
 import { MemberApiService } from '../../services/member-api.service';
+import { TaksApiService } from '../../services/taks-api.service';
 
 @Component({
   selector: 'app-analytics-member-page',
@@ -13,10 +14,12 @@ import { MemberApiService } from '../../services/member-api.service';
   templateUrl: './analytics-member-page.component.html',
   styleUrl: './analytics-member-page.component.css'
 })
-export class AnalyticsMemberPageComponent {
+export class AnalyticsMemberPageComponent implements OnInit {
   private detailsService = inject(DetailsService);
   private leaderMetricsService = inject(AnalyticsLeaderApiService);
   private memberApiService = inject(MemberApiService);
+  private taksApiService = inject(TaksApiService);
+
   member: Member | null = null;
   overview: any = {};
   loadingTasks: boolean = false;
@@ -26,21 +29,57 @@ export class AnalyticsMemberPageComponent {
   totalInProgressDuration: number = 0;
   inProgressTaskDurations: { taskId: number, title: string, duration: number }[] = [];
 
-  private getData() {
-    this.detailsService.getMemberDetails().subscribe((response: Member) => {
-      this.member = response;
+  async ngOnInit(): Promise<void> {
+    this.loadingTasks = true;
+    try {
+      const response = await this.detailsService.getMemberDetails().toPromise();
+      if (!response) {
+        this.loadingTasks = false;
+        console.error('No se pudo obtener el detalle del miembro.');
+        return;
+      }
+      this.member = response as Member;
       const memberId = response.id;
+
+      const statusMap: Record<string, string> = {
+        completed: 'COMPLETED',
+        done: 'DONE',
+        inProgress: 'IN_PROGRESS',
+        pending: 'ON_HOLD',
+        overdue: 'EXPIRED'
+      };
+
+      const overview: any = {};
+      const statusPromises = Object.entries(statusMap).map(async ([key, status]) => {
+        const endpoint = `/api/v1/tasks/status/${status}`;
+        const tasks = await this.taksApiService.getTasksByStatus(status).toPromise().catch(() => []);
+        console.log(`[Resumen General][${key}] Endpoint consultado: ${endpoint}`);
+        console.log(`[Resumen General][${key}] Datos obtenidos:`, tasks);
+
+        let memberTaskCount = 0;
+        if (Array.isArray(tasks) && tasks.length > 0 && this.member) {
+          console.log(`[Resumen General][${key}] Primer tarea:`, tasks[0]);
+          if ('memberId' in tasks[0]) {
+            memberTaskCount = tasks.filter((t: any) => t.memberId === this.member!.id).length;
+          } else if ('member' in tasks[0] && typeof tasks[0].member === 'object' && tasks[0].member !== null && 'id' in tasks[0].member) {
+            memberTaskCount = tasks.filter((t: any) => t.member && t.member.id === this.member!.id).length;
+          } else if ('assignedTo' in tasks[0]) {
+            memberTaskCount = tasks.filter((t: any) => t.assignedTo === this.member!.id).length;
+          } else if ('userId' in tasks[0]) {
+            memberTaskCount = tasks.filter((t: any) => t.userId === this.member!.id).length;
+          } else {
+            memberTaskCount = tasks.length;
+          }
+        }
+        overview[key] = memberTaskCount;
+      });
+      await Promise.all(statusPromises);
+      this.overview = overview;
 
       this.memberApiService.getTasksForMember(memberId).subscribe(memberTasks => {
         this.memberTasks = Array.isArray(memberTasks) ? memberTasks : [];
-        this.overview.pending = this.memberTasks.filter(t => t.status === 'ON_HOLD').length;
-        this.overview.inProgress = this.memberTasks.filter(t => t.status === 'IN_PROGRESS').length;
-        this.overview.completed = this.memberTasks.filter(t => t.status === 'COMPLETED').length;
-        this.overview.done = this.memberTasks.filter(t => t.status === 'DONE').length;
-        this.overview.overdue = this.memberTasks.filter(t => t.status === 'EXPIRED').length;
         this.loadingTasks = false;
 
-        // Nueva lógica para sumar duración de tareas IN_PROGRESS y guardar cada duración
         const inProgressTasks = this.memberTasks.filter(t => t.status === 'IN_PROGRESS');
         this.inProgressTaskDurations = [];
         if (inProgressTasks.length > 0) {
@@ -48,7 +87,9 @@ export class AnalyticsMemberPageComponent {
           let completed = 0;
           this.totalInProgressDuration = 0;
           inProgressTasks.forEach(task => {
+            console.log(`[Tiempo de Tareas en Progreso] Consultando duración para tarea:`, task.id, task.title);
             this.leaderMetricsService.getInProgressTaskDuration(task.id).subscribe(data => {
+              console.log(`[Tiempo de Tareas en Progreso] Respuesta duración tarea ${task.id}:`, data);
               const duration = typeof data.durationInHours === 'number' ? data.durationInHours : 0;
               durations.push(duration);
               this.inProgressTaskDurations.push({
@@ -92,7 +133,10 @@ export class AnalyticsMemberPageComponent {
         const minutes = avgCompletionData.value !== undefined ? Math.round(avgCompletionData.value * 24 * 60) : 0;
         this.avgCompletion = { avgDays: minutes };
       });
-    });
+    } catch (err) {
+      this.loadingTasks = false;
+      console.error('Error al cargar los datos del miembro:', err);
+    }
   }
 
   formatAvgCompletionTime(minutes: number): string {
@@ -118,9 +162,5 @@ export class AnalyticsMemberPageComponent {
       result = '0 horas';
     }
     return result;
-  }
-
-  ngOnInit(): void {
-    this.getData();
   }
 }
