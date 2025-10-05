@@ -18,7 +18,7 @@ export class RequestCardComponent {
 
   redirect(): void {
     if (localStorage.getItem('role') === 'ROLE_LEADER') {
-      this.router.navigate([`/leaders/my-group/requests/${this.request.id}`]).then(r => {});
+      this.router.navigate([`/leaders/my-group/task/${this.request.task.id}/request/${this.request.id}`]).then(r => {});
     }
   }
 

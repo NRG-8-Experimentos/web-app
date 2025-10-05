@@ -35,7 +35,7 @@ export const routes: Routes = [
   { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
-  { path: 'leaders/my-group/requests/:id', component: ValidationPageComponent },
+  { path: 'leaders/my-group/task/:taskId/request/:requestId', component: ValidationPageComponent },
   { path: 'leaders/my-group/tasks', component: TasksLeaderComponent },
   { path: 'members/my-group/tasks', component: TasksMemberComponent },
 

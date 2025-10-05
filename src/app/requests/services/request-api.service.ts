@@ -26,4 +26,10 @@ export class RequestApiService extends BaseApiService<Request>{
     );
   }
 
+  getRequestByTaskIdAndRequestId(taskId: number, requestId: number): Observable<Request> {
+    return this.http.get<Request>(`${this.resourcePath()}/tasks/${taskId}/requests/${requestId}`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
 }
