@@ -1,111 +1,76 @@
 import { Component, OnInit } from '@angular/core';
-import {MemberGroupService} from '@app/groups/services/member-group.service';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {NgForOf, NgIf, NgStyle} from '@angular/common';
+import { CommonModule, NgForOf, NgIf } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { GroupService } from '@app/groups/services/group.service';
+import { ShortMember } from '@app/shared/model/short-member.entity';
+import { Router } from '@angular/router';
+import { Task } from '@app/shared/model/task.entity';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-members-leader',
+  standalone: true,
+  imports: [CommonModule, NgForOf, NgIf, MatCardModule, MatIconModule],
   template: `
-    <div style="margin: 2rem; text-align: center;">
-      <ng-container *ngIf="!selectedMember; else memberDetail">
-        <h2>Integrantes</h2>
-        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 32px;">
-          <mat-card *ngFor="let member of members"
-                    style="width: 350px; margin: 16px; border-radius: 24px; box-shadow: 0px 2px 10px #ddd; cursor:pointer; display: flex; flex-direction: column; align-items: center;"
-                    (click)="selectMember(member)">
-            <mat-card-header style="width: 100%; display: flex; align-items: center;">
-              <div mat-card-avatar>
-                <img *ngIf="member.imgUrl" [src]="member.imgUrl" style="width: 48px; border-radius: 50%;"/>
-              </div>
-              <mat-card-title style="margin-left: 12px; text-align: left; flex:1;">{{ member.name }} {{ member.surname }}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content style="width: 100%;">
-              <div style="background: #174370; color: white; padding: 18px; border-radius: 18px;">
-                <div style="font-weight:700; font-size: 1.3em;">Tarea 1</div>
-                <div>Descripción tarea 1</div>
-              </div>
-            </mat-card-content>
-            <div style="height: 7px; border-radius: 10px; width: 95%; margin: auto; margin-top: 10px;"
-                 [ngStyle]="{ 'background': getColor(member) }"></div>
-            <div style="text-align: center; font-size: 0.95em;">
-              XX/XX/XXXX - XX/XX/XXXX
+    <div class="p-8">
+      <h2 class="text-2xl font-bold mb-6">Integrantes</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <mat-card
+          *ngFor="let member of members; let idx = index"
+          class="rounded-2xl shadow-lg bg-gray-50 px-2 py-2"
+          style="cursor:pointer;"
+          (click)="goToTaskDetails(member.id)"
+        >
+          <div class="flex items-center px-3 pt-3 pb-2">
+            <img [src]="member.imgUrl" alt="{{member.name}}" class="w-10 h-10 rounded-full mr-3 border-2 border-white shadow" />
+            <span class="font-semibold text-lg">{{ member.name }} {{ member.surname }}</span>
+          </div>
+          <ng-container *ngIf="member.task">
+            <div class="rounded-xl shadow bg-[#1e4677] mt-2 mb-2 mx-3 px-4 py-4 text-white">
+              <div class="text-lg font-medium mb-1">{{ member.task.title }}</div>
+              <hr class="my-1 border-blue-500 border-opacity-50">
+              <div class="text-base">{{ member.task.description }}</div>
             </div>
-          </mat-card>
-        </div>
-      </ng-container>
-
-      <ng-template #memberDetail>
-        <button mat-button color="primary" (click)="selectedMember = null" style="margin-bottom: 20px;">
-          ← Regresar
-        </button>
-        <h1>{{ selectedMember.name }} {{ selectedMember.surname }}</h1>
-        <div style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;">
-          <mat-card *ngFor="let task of tasks"
-                    style="width: 500px; border-radius: 32px; min-height:340px; background: #f8f8f8; text-align: left;">
-            <div style="padding: 28px 32px;">
-              <div style="font-size: 1.6em; font-weight: 700;">{{ task.title }}</div>
-              <hr style="margin: 10px 0;">
-              <div style="padding: 16px 12px; border-radius: 18px; background: #fff; font-size: 1.12em; font-weight: 600; min-height:70px; box-shadow: 0 2px 8px #ddd;">
-                {{ task.description }}
-              </div>
-              <div style="height: 13px; border-radius: 10px; margin: 18px 0 4px 0;"
-                   [ngStyle]="{ 'background': getTaskColor(task.status) }"></div>
-              <div style="text-align:center;font-size:1em;">{{ task.dueDate }} </div>
-            </div>
-          </mat-card>
-        </div>
+            <div class="mt-3 mx-6 h-2.5 rounded-full bg-green-400"></div>
+            <div class="text-xs text-center tracking-wider mt-1 mb-2">{{ member.task.dueDate | date:'shortDate' }}</div>
+          </ng-container>
+          <ng-container *ngIf="!member.task">
+            <div class="rounded-xl shadow bg-gray-200 mt-2 mb-2 mx-3 px-4 py-4 text-gray-600">Sin tareas</div>
+          </ng-container>
+        </mat-card>
+      </div>
+      <ng-template #noMembers>
+        <p>No hay integrantes para mostrar.</p>
       </ng-template>
     </div>
-  `,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatButtonModule,
-    MatIconModule,
-    NgStyle,
-    NgForOf,
-    NgIf
-  ],
-  styles: []
+  `
 })
 export class MembersLeaderComponent implements OnInit {
-  members: any[] = [];
-  selectedMember: any = null;
-  tasks: any[] = [];
+  members: (ShortMember & { task?: Task })[] = [];
 
-  constructor(private memberGroupService: MemberGroupService) {}
+  constructor(private groupService: GroupService, private router: Router) {}
+
+  goToTaskDetails(memberId: number) {
+    this.router.navigate([`/leaders/my-group/members/${memberId}/tasks`]);
+  }
 
   ngOnInit() {
-    this.memberGroupService.getMemberGroup().subscribe(data => {
-      this.members = data.members || [];
+    const groupId = 1; // Asegúrate de usar el groupId correcto
+    forkJoin({
+      members: this.groupService.getGroupMembers(),
+      tasks: this.groupService.getAllTasksByGroupId(groupId)
+    }).subscribe({
+      next: ({members, tasks}) => {
+        this.members = members.map(member => ({
+          ...member,
+          // Busca la tarea correspondiente al miembro según la estructura real
+          task: tasks.find(task => task.member && task.member.id === member.id)
+        }));
+      },
+      error: (error) => {
+        console.error('Error al obtener integrantes o tareas', error);
+      }
     });
-  }
-
-  selectMember(member: any) {
-    this.selectedMember = member;
-    this.memberGroupService.getMemberTasks(member.id).subscribe(tasks => {
-      this.tasks = tasks || [];
-    }, () => {
-      this.tasks = [];
-    });
-  }
-
-  getColor(member: any): string {
-    if (member.name === 'Alissa') return 'linear-gradient(to right, #61ce70 90%, #61ce70 100%)';
-    if (member.name === 'Jose') return 'linear-gradient(to right, #f6da49 90%, #f6da49 100%)';
-    return 'linear-gradient(to right, #ee3e34 90%, #ee3e34 100%)';
-  }
-
-  getTaskColor(status: string): string {
-    switch(status.toLowerCase()) {
-      case 'finalized': return 'linear-gradient(to right, #61ce70 100%, #61ce70 100%)';
-      case 'pending': return 'linear-gradient(to right, #f6da49 100%, #f6da49 100%)';
-      case 'overdue': return 'linear-gradient(to right, #ee3e34 100%, #ee3e34 100%)';
-      default: return 'linear-gradient(to right, #999 100%, #999 100%)';
-    }
   }
 }
