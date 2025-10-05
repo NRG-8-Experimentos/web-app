@@ -22,7 +22,18 @@ export class GroupService extends BaseApiService<Group>{
     return this.http.get<Group>(`${this.resourcePath()}/search?code=${code}`, this.httpOptions);
   }
 
+  getGroupMembers(): Observable<ShortMember[]> {
+    return this.http.get<ShortMember[]>(`${this.resourcePath()}/members`, this.httpOptions);
+  }
+
   getAllMembersOfGroup(): Observable<ShortMember[]>{
     return this.http.get<ShortMember[]>(`${this.resourcePath()}/members`, this.httpOptions);
   }
+
+  getAllTasksByGroupId(groupId: number): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.resourcePath()}/tasks?groupId=${groupId}`, this.httpOptions);
+  }
+
+
+
 }
