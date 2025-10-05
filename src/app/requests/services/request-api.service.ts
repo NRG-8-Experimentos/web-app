@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {BaseApiService} from '@app/shared/services/base-api.service';
 import {Request} from '@app/requests/model/request.entity';
 import {catchError, Observable, retry} from 'rxjs';
+import {Task} from '@app/shared/model/task.entity';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,27 @@ export class RequestApiService extends BaseApiService<Request>{
 
   getRequestByTaskIdAndRequestId(taskId: number, requestId: number): Observable<Request> {
     return this.http.get<Request>(`${this.resourcePath()}/tasks/${taskId}/requests/${requestId}`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+  updateRequestStatus(taskId: number, requestId: number, status: string): Observable<Request> {
+    return this.http.put<Request>(`${this.resourcePath()}/tasks/${taskId}/requests/${requestId}/status/`, {status}, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+  updateTaskStatus(taskId: number, status: string): Observable<Task> {
+    return this.http.put<Task>(`${this.resourcePath()}/tasks/${taskId}/status/`, {status}, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteRequest(taskId: number, requestId: number): Observable<void> {
+    return this.http.delete<void>(`${this.resourcePath()}/tasks/${taskId}/requests/${requestId}`, this.httpOptions).pipe(
       retry(2),
       catchError(this.handleError)
     );

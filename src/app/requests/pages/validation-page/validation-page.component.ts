@@ -64,21 +64,32 @@ export class ValidationPageComponent {
 
   reprogram(): void {
     if (this.request)
-      this.router.navigate([`/validation/edit/${this.request.task.id}/${this.request.id}`]);
+      this.router.navigate([`leaders/tasks/${this.request.task.id}/validation/edit/request/${this.request.id}`]);
   }
 
   markAsCompleted(): void {
-    // Aquí deberías llamar a los servicios para actualizar el estado
-    // y luego navegar o actualizar la vista
-    // Ejemplo:
-    // this.requestApiService.updateRequestStatus(...);
-    // this.taskApiService.updateTaskStatus(...);
-    this.router.navigate(['/leaders/my-group/request-&-validations']); // Simula popBackStack
+    this.requestApiService.updateRequestStatus(this.request!.task.id, this.request!.id, 'APPROVED').subscribe({
+      next: () => {
+        this.requestApiService.updateTaskStatus(this.request!.task.id, 'DONE').subscribe({
+          next: () => {
+            this.router.navigate(['/leaders/my-group/request-&-validations']);
+          }
+        });
+      }
+    });
   }
 
   denyModification(): void {
     // Lógica similar a markAsCompleted, pero para denegar
-    this.router.navigate(['/leaders/my-group/request-&-validations']);
+    this.requestApiService.updateRequestStatus(this.request!.task.id, this.request!.id, 'REJECTED').subscribe({
+      next: () => {
+        this.requestApiService.updateTaskStatus(this.request!.task.id, 'IN_PROGRESS').subscribe({
+          next: () => {
+            this.router.navigate(['/leaders/my-group/request-&-validations']);
+          }
+        });
+      }
+    });
   }
 
 }
