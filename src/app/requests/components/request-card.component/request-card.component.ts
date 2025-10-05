@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Request} from '@app/requests/model/request.entity';
 import {NgStyle} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-request-card',
@@ -12,6 +13,15 @@ import {NgStyle} from '@angular/common';
 })
 export class RequestCardComponent {
   @Input() request!: Request;
+
+  constructor(private router: Router) {}
+
+  redirect(): void {
+    if (localStorage.getItem('role') === 'ROLE_LEADER') {
+      this.router.navigate([`/leaders/my-group/requests/${this.request.id}`]).then(r => {});
+    }
+  }
+
 
   setTypeColor(type?: string): string {
     switch (type) {

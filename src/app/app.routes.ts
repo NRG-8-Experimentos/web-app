@@ -22,6 +22,7 @@ import {CreateTaskComponent} from '@app/tasks/pages/create-task/create-task';
 import {EditTaskComponent} from '@app/tasks/pages/edit-task/edit-task';
 import {ViewTaskComponent} from '@app/tasks/pages/view-task/view-task';
 import {CommentTaskComponent} from '@app/tasks/pages/comment-task/comment-task';
+import {ValidationPageComponent} from '@app/requests/pages/validation-page/validation-page.component';
 
 export const routes: Routes = [
   {path: '', component: MainComponent, canActivate:[authGuard]},
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
+  { path: 'leaders/my-group/requests/:id', component: ValidationPageComponent },
   { path: 'leaders/my-group/tasks', component: TasksLeaderComponent },
   { path: 'members/my-group/tasks', component: TasksMemberComponent },
 
@@ -50,5 +52,6 @@ export const routes: Routes = [
   { path: 'members/my-group/request-&-validations', component: RequestsMemberComponent},
   { path: 'members/my-group/analytics', component: AnalyticsMemberPageComponent },
   { path: 'members/group-search', component: InvitationMemberComponent },
+
   { path: '**', redirectTo: '' }
 ];
