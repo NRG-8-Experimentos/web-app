@@ -19,13 +19,14 @@
   <div class="meta">
     <span class="muted">Tiempo restante: {{ remainingLabel }}</span>
   </div>
-
-  <footer class="actions">
-    <button type="button" class="btn btn-comment" (click)="$event.stopPropagation(); goComment()">
-      Enviar un comentario
-    </button>
-    <button type="button" class="btn btn-done" (click)="$event.stopPropagation(); markDone()">
-      Marcar como completada
-    </button>
-  </footer>
+  @if (task.status === 'IN_PROGRESS') {
+    <footer class="actions">
+      <button type="button" class="btn btn-comment" (click)="$event.stopPropagation(); goComment()">
+        Enviar un comentario
+      </button>
+      <button type="button" class="btn btn-done" (click)="$event.stopPropagation(); markDone()">
+        Marcar como completada
+      </button>
+    </footer>
+  }
 </article>

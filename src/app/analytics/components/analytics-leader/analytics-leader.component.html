@@ -68,14 +68,6 @@
         </span>
       </div>
     </div>
-    <hr class="section-divider">
-    <div class="members-list">
-      <span class="members-title">Todos los miembros:</span>
-      <div *ngFor="let member of safeMembers" class="member-row">
-        <img *ngIf="member.imgUrl" [src]="member.imgUrl" class="profile-image">
-        <span class="member-name">{{ member.name }} {{ member.surname }}</span>
-      </div>
-    </div>
   </div>
 
   <!-- Tareas Reprogramadas -->
