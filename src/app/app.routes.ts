@@ -18,6 +18,7 @@ import {InvitationMemberComponent} from './invitations/pages/invitation-member/i
 import {AnalyticsLeaderPageComponent } from './analytics/pages/analytics-leader-page/analytics-leader-page.component';
 import {CreateGroupComponent} from '@app/groups/pages/create-group/create-group.component';
 import {MembersLeaderComponent} from '@app/groups/pages/members-leader/members-leader.component';
+import {TaskMemberDetailsComponent} from '@app/groups/components/task-member-details/task-member-details';
 import {CreateTaskComponent} from '@app/tasks/pages/create-task/create-task';
 import {EditTaskComponent} from '@app/tasks/pages/edit-task/edit-task';
 import {ViewTaskComponent} from '@app/tasks/pages/view-task/view-task';
@@ -33,6 +34,7 @@ export const routes: Routes = [
   { path: 'leaders/main', component: MainLeaderComponent },
   { path: 'leaders/my-group', component: MyGroupLeaderComponent },
   { path: 'leaders/my-group/members', component: MembersLeaderComponent },
+  { path: 'leaders/my-group/members/:id/tasks', component: TaskMemberDetailsComponent },
   { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
