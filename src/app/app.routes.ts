@@ -19,6 +19,12 @@ import {AnalyticsLeaderPageComponent } from './analytics/pages/analytics-leader-
 import {CreateGroupComponent} from '@app/groups/pages/create-group/create-group.component';
 import {MembersLeaderComponent} from '@app/groups/pages/members-leader/members-leader.component';
 import {TaskMemberDetailsComponent} from '@app/groups/components/task-member-details/task-member-details';
+import {CreateTaskComponent} from '@app/tasks/pages/create-task/create-task';
+import {EditTaskComponent} from '@app/tasks/pages/edit-task/edit-task';
+import {ViewTaskComponent} from '@app/tasks/pages/view-task/view-task';
+import {CommentTaskComponent} from '@app/tasks/pages/comment-task/comment-task';
+import {ValidationPageComponent} from '@app/requests/pages/validation-page/validation-page.component';
+import {EditValidationComponent} from '@app/requests/pages/edit-validation/edit-validation.component';
 
 export const routes: Routes = [
   {path: '', component: MainComponent, canActivate:[authGuard]},
@@ -32,12 +38,24 @@ export const routes: Routes = [
   { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
+  { path: 'leaders/my-group/task/:taskId/request/:requestId', component: ValidationPageComponent },
+  { path: 'leaders/tasks/:taskId/validation/edit/request/:requestId', component: EditValidationComponent},
   { path: 'leaders/my-group/tasks', component: TasksLeaderComponent },
+  { path: 'members/my-group/tasks', component: TasksMemberComponent },
+
+  { path: 'leaders/my-group/tasks/create', component: CreateTaskComponent },
+  { path: 'leaders/my-group/tasks/:id/edit', component: EditTaskComponent },
+  { path: 'leaders/my-group/tasks/:id', component: ViewTaskComponent },
+  { path: 'members/my-group/tasks/:id', component: ViewTaskComponent },
+  { path: 'members/my-group/tasks/:id/comment', component: CommentTaskComponent },
+
+
   { path: 'leaders/my-group/analytics', component: AnalyticsLeaderPageComponent },
   { path: 'members/my-group', component: MyGroupMemberComponent },
-  { path: 'members/my-group/tasks', component: TasksMemberComponent },
+
   { path: 'members/my-group/request-&-validations', component: RequestsMemberComponent},
   { path: 'members/my-group/analytics', component: AnalyticsMemberPageComponent },
   { path: 'members/group-search', component: InvitationMemberComponent },
+
   { path: '**', redirectTo: '' }
 ];
