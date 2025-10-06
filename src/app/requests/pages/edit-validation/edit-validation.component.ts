@@ -132,7 +132,7 @@ export class EditValidationComponent {
 
     this.tasksApiService.updateTask(this.taskId, payload).subscribe({
       next: () => {
-        this.requestApiService.updateTaskStatus(this.taskId, 'IN_PROGRESS').subscribe({
+        this.requestApiService.updateTaskStatus(this.taskId, "IN_PROGRESS").subscribe({
           next: () => {
             this.requestApiService.deleteRequest(
               this.taskId,
