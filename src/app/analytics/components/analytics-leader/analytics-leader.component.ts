@@ -12,12 +12,15 @@ export class AnalyticsLeaderComponent {
   @Input() analytics!: LeaderAnalyticsResource;
   @Input() membersWithRescheduled!: any[];
   @Input() avgCompletionMembers: any[] = [];
+  @Input() inProgressDurationsMembers: { name: string, surname: string, imgUrl: string, totalInProgress: number }[] = [];
+  @Input() formatInProgressDuration!: (hours: number) => string;
 
   get safeMembers() {
     return this.analytics?.members ?? [];
   }
 
   getMemberTaskCount(member: any): number {
+    if (!member) return 0;
     if (member.taskCount && typeof member.taskCount === 'number') {
       return member.taskCount;
     }
@@ -30,8 +33,8 @@ export class AnalyticsLeaderComponent {
     return 0;
   }
 
-  getMaxTaskCount(members: any[]): number {
-    const arr = members?.map(m => this.getMemberTaskCount(m)) ?? [];
+  getMaxTaskCount(members: any[] = []): number {
+    const arr = (members ?? []).map(m => this.getMemberTaskCount(m));
     return arr.length > 0 ? Math.max(...arr) : 1;
   }
 

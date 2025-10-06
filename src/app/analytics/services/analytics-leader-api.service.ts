@@ -33,17 +33,17 @@ export class AnalyticsLeaderApiService extends BaseApiService<LeaderAnalyticsRes
     );
   }
 
-  getTaskDistributionForMember(memberId: number): Observable<any> {
-    return this.http.get<any>(`${this.resourcePath()}/member/${memberId}/tasks/distribution`, this.httpOptions).pipe(
+  getAvgCompletionTimeForMember(memberId: number): Observable<any> {
+    return this.http.get<any>(`${this.resourcePath()}/member/${memberId}/tasks/avg-completion-time`, this.httpOptions).pipe(
         retry(2),
         catchError(this.handleError)
     );
   }
 
-  getAvgCompletionTimeForMember(memberId: number): Observable<any> {
-    return this.http.get<any>(`${this.resourcePath()}/member/${memberId}/tasks/avg-completion-time`, this.httpOptions).pipe(
-        retry(2),
-        catchError(this.handleError)
+  getInProgressTaskDuration(taskId: number): Observable<any> {
+    return this.http.get<any>(`${this.resourcePath()}/task/${taskId}/duration`, this.httpOptions).pipe(
+      retry(2),
+      catchError(this.handleError)
     );
   }
 

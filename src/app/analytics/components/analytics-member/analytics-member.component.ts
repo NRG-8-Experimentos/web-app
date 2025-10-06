@@ -17,4 +17,7 @@ export class AnalyticsMemberComponent {
   @Input() rescheduled: any = {};
   @Input() avgCompletion: any = {};
   @Input() formatAvgCompletionTime!: (minutes: number) => string;
+  @Input() totalInProgressDuration: number = 0;
+  @Input() formatInProgressDuration!: (hours: number) => string;
+  @Input() inProgressTaskDurations: { taskId: number, title: string, duration: number }[] = [];
 }
