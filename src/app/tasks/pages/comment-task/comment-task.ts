@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TasksApiService, Task } from '../../services/tasks-api.service';
+import {RequestApiService} from '@app/requests/services/request-api.service';
+import {TaskStatus} from '@app/tasks/model/task.model';
 
 @Component({
   selector: 'app-comment-task',
@@ -14,8 +16,8 @@ import { TasksApiService, Task } from '../../services/tasks-api.service';
 export class CommentTaskComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  protected api = inject(TasksApiService);
-
+  protected tasksApiService = inject(TasksApiService);
+  private requestApiService = inject(RequestApiService);
   task?: Task;
   taskId!: number;
 
@@ -30,7 +32,7 @@ export class CommentTaskComponent {
       return;
     }
 
-    this.api.getById(this.taskId).subscribe({
+    this.tasksApiService.getById(this.taskId).subscribe({
       next: (t) => { this.task = t; this.loading = false; },
       error: () => { this.router.navigate(['/members/my-group/tasks']); }
     });
@@ -71,8 +73,13 @@ export class CommentTaskComponent {
       taskId: this.taskId,
       message: this.comment.trim()
     });
-    this.saving = false;
-    this.router.navigate(['/members/my-group/tasks', this.taskId]);
+
+    this.requestApiService.createRequest(this.taskId, this.comment.trim(), 'MODIFICATION').subscribe({ next: () => {
+        this.tasksApiService.updateStatus(this.taskId, TaskStatus.ON_HOLD).subscribe({ next: () =>{
+            this.saving = false;
+            this.router.navigate(['/members/my-group/tasks', this.taskId]);
+          } });
+      }});
   }
 
   cancel() { this.router.navigate(['/members/my-group/tasks']); }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Task, TaskStatus } from '../../model/task.model';
 import { TasksApiService } from '../../services/tasks-api.service';
+import {RequestApiService} from '@app/requests/services/request-api.service';
 
 @Component({
   selector: 'member-task-item',
@@ -15,7 +16,8 @@ export class MemberTaskItemComponent implements OnChanges {
   @Input({ required: true }) task!: Task;
   @Output() changed = new EventEmitter<void>();
 
-  protected api = inject(TasksApiService);
+  protected tasksApiService = inject(TasksApiService);
+  private requestApiService = inject(RequestApiService);
   private router = inject(Router);
 
   TaskStatus = TaskStatus;
@@ -66,6 +68,8 @@ export class MemberTaskItemComponent implements OnChanges {
   }
 
   markDone() {
-    this.api.updateStatus(this.task.id, TaskStatus.COMPLETED).subscribe({ next: () => this.changed.emit() });
+    this.requestApiService.createRequest(this.task.id, 'Se ha completado la tarea.', 'SUBMISSION').subscribe({ next: () => {
+        this.tasksApiService.updateStatus(this.task.id, TaskStatus.COMPLETED).subscribe({ next: () => this.changed.emit() });
+    }});
   }
 }
