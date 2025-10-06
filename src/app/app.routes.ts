@@ -34,7 +34,7 @@ export const routes: Routes = [
   { path: 'leaders/main', component: MainLeaderComponent },
   { path: 'leaders/my-group', component: MyGroupLeaderComponent },
   { path: 'leaders/my-group/members', component: MembersLeaderComponent },
-  { path: 'leaders/my-group/members/:id/tasks', component: TaskMemberDetailsComponent },
+  { path: 'leaders/my-group/members/:memberId/tasks', component: TaskMemberDetailsComponent },
   { path: 'leaders/create-group', component: CreateGroupComponent },
   { path: 'leaders/my-group/invitations', component: InvitationsLeaderComponent },
   { path: 'leaders/my-group/request-&-validations', component: RequestsLeaderComponent },
