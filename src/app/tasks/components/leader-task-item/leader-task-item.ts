@@ -42,8 +42,8 @@ export class LeaderTaskItemComponent {
     if (!this.canModify) return;
     const ref = this.dialog.open(ConfirmDeleteDialogComponent, {
       data: {
-        title: 'Delete Task',
-        message: `Are you sure you want to delete "${this.task.title}"?`
+        title: 'Eliminar tarea',
+        message: `Esta seguro(a) que quieres eliminar la tarea "${this.task.title}"?`
       }
     });
     ref.afterClosed().subscribe(yes => {

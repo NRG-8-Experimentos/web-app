@@ -77,7 +77,7 @@ export class CommentTaskComponent {
     this.requestApiService.createRequest(this.taskId, this.comment.trim(), 'MODIFICATION').subscribe({ next: () => {
         this.tasksApiService.updateStatus(this.taskId, TaskStatus.ON_HOLD).subscribe({ next: () =>{
             this.saving = false;
-            this.router.navigate(['/members/my-group/tasks', this.taskId]);
+            this.router.navigate(['/members/my-group/tasks']);
           } });
       }});
   }
