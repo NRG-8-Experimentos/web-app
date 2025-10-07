@@ -1,3 +1,3 @@
 export const environment = {
-  baseUrl: 'http://localhost:8080/api/v1',
+  baseUrl: 'https://backend-4cdp.onrender.com/api/v1',
 };
