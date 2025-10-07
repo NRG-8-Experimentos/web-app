@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, catchError, of} from 'rxjs';
 import { Router } from '@angular/router';
 import {SignInRequest} from "../model/requests/sign-in.request";
 import {SignInResponse} from "../model/responses/sign-in.response";
+import {SignUpRequest} from '../model/requests/sign-up.request';
+import {DetailsService} from '../../shared/services/details.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class AuthService {
   private signedInUsername: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private signedInUserType: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private detailApiService: DetailsService) { }
 
   get isSignedIn() {
     return this.signedIn.asObservable();
@@ -35,6 +37,19 @@ export class AuthService {
 
   get currentUserType() {
     return this.signedInUserType.asObservable();
+  }
+
+  signUp(signUpRequest: SignUpRequest) {
+    return this.http.post(`${this.basePath}/authentication/sign-up`, signUpRequest, this.httpOptions)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/sign-in']).then();
+        },
+        error: (error) => {
+          console.error(`Error while signing up: ${error}`);
+          this.router.navigate(['/sign-up']).then();
+        }
+      });
   }
 
   /**
@@ -78,7 +93,21 @@ export class AuthService {
           if(this.signedInUserType.value === 'ROLE_LEADER') {
             this.router.navigate(['/leaders/main']).then();
           }else if (this.signedInUserType.value === 'ROLE_MEMBER') {
-            this.router.navigate(['/members/main']).then();
+            this.detailApiService.getMemberGroup()
+              .pipe(
+                catchError(err => {
+                  if (err.status === 404) {
+                    this.router.navigate(['/members/group-search']).then();
+                    return of(null);
+                  }
+                  return of(null);
+                })
+              )
+              .subscribe(group => {
+                if (group !== null && group !== undefined) {
+                  this.router.navigate(['/members/main']).then();
+                }
+              });
           }
         },
         error: (error) => {

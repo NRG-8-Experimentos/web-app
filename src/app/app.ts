@@ -1,11 +1,11 @@
 import {Component, signal, ViewChild} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {MatSidenav} from '@angular/material/sidenav';
-import {SidenavComponent} from './shared/components/sidenav.component/sidenav.component';
+import {SidenavComponent} from '@app/shared/components/sidenav/sidenav.component';
 import {BodyComponent} from './shared/pages/body/body.component';
-import {NgIf} from '@angular/common';
 import {LoginEventService} from './iam/services/login-event.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import {DetailsService} from './shared/services/details.service';
 
 interface SideNavToggle{
   screenWidth: number;
@@ -20,7 +20,7 @@ export const LOGOUT_OPTION = {
 
 @Component({
   selector: 'app-root',
-  imports: [SidenavComponent, BodyComponent, NgIf,],
+  imports: [SidenavComponent, BodyComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -56,7 +56,10 @@ export class App {
           localStorage.clear();
           this.screenWidth = 0;
         }
-        this.showSideBar = !(currentRoute.includes('sign-in') || currentRoute.includes('sign-up'));
+        if (currentRoute.includes('members/group-search')){
+          this.screenWidth = 0;
+        }
+        this.showSideBar = !(currentRoute.includes('sign-in') || currentRoute.includes('sign-up') || currentRoute === '/' || currentRoute.includes('members/group-search'));
         //console.log('Ruta actual:', currentRoute);
         //console.log('showToolbar:', this.showSideBar);
         this.loginEventService.loginSuccess$.subscribe(() => {

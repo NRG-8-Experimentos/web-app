@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {GroupDisplayComponent} from '../../components/group-display/group-display.component';
+import {GroupDisplayComponent} from '@app/groups/components/group-display/group-display.component';
 
 @Component({
   selector: 'app-my-group-leader',
@@ -7,10 +7,7 @@ import {GroupDisplayComponent} from '../../components/group-display/group-displa
     GroupDisplayComponent
   ],
   template: `
-    <div class="h-full w-full">
-      <h1 class="text-2xl font-bold">Grupo</h1>
-      <app-group-display/>
-    </div>
+    <app-group-display/>
   `,
   styleUrl: './my-group-leader.component.css'
 })
