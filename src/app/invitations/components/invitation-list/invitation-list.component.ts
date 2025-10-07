@@ -18,7 +18,7 @@ export class InvitationListComponent implements OnChanges{
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['invitations']) {
-      console.log("invitations on invitation list:", this.invitations);
+      // console.log("invitations on invitation list:", this.invitations);
     }
   }
 

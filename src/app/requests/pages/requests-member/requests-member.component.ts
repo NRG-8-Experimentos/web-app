@@ -40,7 +40,7 @@ export class RequestsMemberComponent {
       this.allRequests.set(response);
       this.requests = response; // para compatibilidad con el input actual
     }, error => {
-      console.error('There was an error fetching requests!', error);
+      // console.error('There was an error fetching requests!', error);
     });
   }
 

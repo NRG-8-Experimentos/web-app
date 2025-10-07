@@ -101,7 +101,7 @@ export class CreateGroupComponent {
         this.router.navigate(['leaders/group']).then();
       },
       error: (err) => {
-        console.error('Error creating group', err);
+        // console.error('Error creating group', err);
       }
     })
     this.submitted = true;

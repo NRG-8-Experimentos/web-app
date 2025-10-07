@@ -107,7 +107,9 @@ export class TaskMemberDetailsComponent implements OnInit {
             this.tasks = tasks;
             this.filtrar();
           },
-          error: (err) => console.error('Error al obtener tareas del miembro', err)
+          error: (err) =>
+            // console.error('Error al obtener tareas del miembro', err)
+            {}
         });
     }
   }

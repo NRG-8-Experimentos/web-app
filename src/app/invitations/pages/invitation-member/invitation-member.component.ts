@@ -42,20 +42,20 @@ export class InvitationMemberComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkActiveInvitation()
-    console.clear()
+    // console.clear()
   }
 
   checkActiveInvitation(): void {
     this.invitationsApi.getInvitationsByMember().subscribe({
       next: (invitation) => {
-        console.log('Invitacion activa', invitation);
+        // console.log('Invitacion activa', invitation);
         this.activeInvitation = invitation || null;
       },
       error: (err) => {
         this.activeInvitation = null;
       }
     });
-    console.clear();
+    // console.clear();
   }
 
   onSearch(): void {
@@ -64,13 +64,13 @@ export class InvitationMemberComponent implements OnInit {
       next: (group) => {
         this.groupFound = group;
         this.searchError = null;
-        console.log('Grupo encontrado:', group);
+        // console.log('Grupo encontrado:', group);
         // Aquí puedes manejar la respuesta, mostrar datos, etc.
       },
       error: (err) => {
         this.groupFound = null;
         this.searchError = 'No se encontró ningún grupo con ese código.';
-        console.error('Error al buscar grupo:', err);
+        // console.error('Error al buscar grupo:', err);
         // Aquí puedes mostrar un mensaje de error al usuario
       }
     });
@@ -80,10 +80,10 @@ export class InvitationMemberComponent implements OnInit {
     this.invitationsApi.sendInvitation(this.groupFound?.id).subscribe({
       next: () => {
         this.checkActiveInvitation()// Actualiza la invitación activa
-        console.clear();
+        // console.clear();
       },
       error: (err) => {
-        console.error('Error al enviar invitación:', err);
+        // console.error('Error al enviar invitación:', err);
       }
     });
   }
@@ -92,10 +92,10 @@ export class InvitationMemberComponent implements OnInit {
     this.invitationsApi.cancelInvitation().subscribe({
       next: () => {
         this.activeInvitation =  null
-        console.clear();
+        // console.clear();
       },
       error: (err) => {
-        console.error('Error al cancelar invitación:', err);
+        // console.error('Error al cancelar invitación:', err);
       }
     });
   }
@@ -108,7 +108,7 @@ export class InvitationMemberComponent implements OnInit {
       },
       error: (err) => {
         this.checkActiveInvitation();
-        console.error('Error al consultar el grupo:', err);
+        // console.error('Error al consultar el grupo:', err);
       }
     });
   }

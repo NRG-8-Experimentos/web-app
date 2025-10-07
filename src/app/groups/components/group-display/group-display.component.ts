@@ -144,7 +144,7 @@ export class GroupDisplayComponent {
         this.hasMembers = this.members.length > 0;
       },
       error: (err) => {
-        console.error('Error deleting member', err);
+        // console.error('Error deleting member', err);
       }
     })
   }

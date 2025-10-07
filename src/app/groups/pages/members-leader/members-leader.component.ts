@@ -75,7 +75,7 @@ export class MembersLeaderComponent implements OnInit {
         }));
       },
       error: (error) => {
-        console.error('Error al obtener integrantes o tareas', error);
+        // console.error('Error al obtener integrantes o tareas', error);
       }
     });
   }

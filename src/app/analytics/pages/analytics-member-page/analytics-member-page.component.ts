@@ -35,7 +35,7 @@ export class AnalyticsMemberPageComponent implements OnInit {
       const response = await this.detailsService.getMemberDetails().toPromise();
       if (!response) {
         this.loadingTasks = false;
-        console.error('No se pudo obtener el detalle del miembro.');
+        // console.error('No se pudo obtener el detalle del miembro.');
         return;
       }
       this.member = response as Member;
@@ -53,12 +53,12 @@ export class AnalyticsMemberPageComponent implements OnInit {
       const statusPromises = Object.entries(statusMap).map(async ([key, status]) => {
         const endpoint = `/api/v1/tasks/status/${status}`;
         const tasks = await this.taksApiService.getTasksByStatus(status).toPromise().catch(() => []);
-        console.log(`[Resumen General][${key}] Endpoint consultado: ${endpoint}`);
-        console.log(`[Resumen General][${key}] Datos obtenidos:`, tasks);
+        // console.log(`[Resumen General][${key}] Endpoint consultado: ${endpoint}`);
+        // console.log(`[Resumen General][${key}] Datos obtenidos:`, tasks);
 
         let memberTaskCount = 0;
         if (Array.isArray(tasks) && tasks.length > 0 && this.member) {
-          console.log(`[Resumen General][${key}] Primer tarea:`, tasks[0]);
+          // console.log(`[Resumen General][${key}] Primer tarea:`, tasks[0]);
           if ('memberId' in tasks[0]) {
             memberTaskCount = tasks.filter((t: any) => t.memberId === this.member!.id).length;
           } else if ('member' in tasks[0] && typeof tasks[0].member === 'object' && tasks[0].member !== null && 'id' in tasks[0].member) {
@@ -87,9 +87,9 @@ export class AnalyticsMemberPageComponent implements OnInit {
           let completed = 0;
           this.totalInProgressDuration = 0;
           inProgressTasks.forEach(task => {
-            console.log(`[Tiempo de Tareas en Progreso] Consultando duración para tarea:`, task.id, task.title);
+            // console.log(`[Tiempo de Tareas en Progreso] Consultando duración para tarea:`, task.id, task.title);
             this.leaderMetricsService.getInProgressTaskDuration(task.id).subscribe(data => {
-              console.log(`[Tiempo de Tareas en Progreso] Respuesta duración tarea ${task.id}:`, data);
+              // console.log(`[Tiempo de Tareas en Progreso] Respuesta duración tarea ${task.id}:`, data);
               const duration = typeof data.durationInHours === 'number' ? data.durationInHours : 0;
               durations.push(duration);
               this.inProgressTaskDurations.push({
@@ -115,11 +115,11 @@ export class AnalyticsMemberPageComponent implements OnInit {
       }, err => {
         this.memberTasks = [];
         this.loadingTasks = false;
-        console.error(
-          'Error en api/v1/member/tasks: Verifica que la ruta exista en el backend y que el proxy/conf esté correctamente configurado.'
-        );
+        // console.error(
+        //   'Error en api/v1/member/tasks: Verifica que la ruta exista en el backend y que el proxy/conf esté correctamente configurado.'
+        // );
         if (err && err.error) {
-          console.error('Error body:', err.error);
+          // console.error('Error body:', err.error);
         }
       });
 
@@ -135,7 +135,7 @@ export class AnalyticsMemberPageComponent implements OnInit {
       });
     } catch (err) {
       this.loadingTasks = false;
-      console.error('Error al cargar los datos del miembro:', err);
+      // console.error('Error al cargar los datos del miembro:', err);
     }
   }
 

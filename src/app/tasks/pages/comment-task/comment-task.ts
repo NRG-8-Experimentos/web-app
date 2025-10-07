@@ -69,10 +69,6 @@ export class CommentTaskComponent {
   submit() {
     if (!this.comment.trim()) return;
     this.saving = true;
-    console.log('Comentario preparado para enviar:', {
-      taskId: this.taskId,
-      message: this.comment.trim()
-    });
 
     this.requestApiService.createRequest(this.taskId, this.comment.trim(), 'MODIFICATION').subscribe({ next: () => {
         this.tasksApiService.updateStatus(this.taskId, TaskStatus.ON_HOLD).subscribe({ next: () =>{

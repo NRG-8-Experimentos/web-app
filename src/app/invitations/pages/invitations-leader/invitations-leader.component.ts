@@ -18,9 +18,9 @@ export class InvitationsLeaderComponent {
   private getData() {
     this.invitationsApiService.fetchGroupInvitations().subscribe((response: Array<Invitation>) => {
       this.invitations = response;
-      console.log('Invitations fetched successfully:', this.invitations);
+      // console.log('Invitations fetched successfully:', this.invitations);
     }, error => {
-      console.error('There was an error fetching invitations!', error);
+      // console.error('There was an error fetching invitations!', error);
     });
   }
 

@@ -125,7 +125,7 @@ export class EditTaskComponent {
     this.api.updateTask(this.taskId, payload).subscribe({
       next: () => this.router.navigate(['/leaders/my-group/tasks']),
       error: (err) => {
-        console.error('Error actualizando tarea', err);
+        // console.error('Error actualizando tarea', err);
         alert('No se pudo actualizar la tarea. Inténtalo de nuevo.');
         this.saving = false;
       }

@@ -46,7 +46,7 @@ export class AuthService {
           this.router.navigate(['/sign-in']).then();
         },
         error: (error) => {
-          console.error(`Error while signing up: ${error}`);
+          // console.error(`Error while signing up: ${error}`);
           this.router.navigate(['/sign-up']).then();
         }
       });
@@ -114,7 +114,7 @@ export class AuthService {
           this.signedIn.next(false);
           this.signedInUserId.next(0);
           this.signedInUsername.next('');
-          console.error(`Error while signing in: ${error}`);
+          // console.error(`Error while signing in: ${error}`);
           this.router.navigate(['/sign-in']).then();
         }
       });

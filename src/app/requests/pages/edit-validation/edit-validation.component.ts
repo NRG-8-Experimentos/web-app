@@ -142,21 +142,21 @@ export class EditValidationComponent {
                 this.router.navigate(['/leaders/my-group/request-&-validations']);
               },
               error: (err) => {
-                console.error('Error eliminando solicitud', err);
+                // console.error('Error eliminando solicitud', err);
                 alert('No se pudo eliminar la solicitud. Inténtalo de nuevo.');
                 this.saving = false;
               }
             });
           },
           error: (err) => {
-            console.error('Error actualizando estado de la tarea', err);
+            // console.error('Error actualizando estado de la tarea', err);
             alert('No se pudo actualizar el estado de la tarea. Inténtalo de nuevo.');
             this.saving = false;
           }
         });
       },
       error: (err) => {
-        console.error('Error actualizando tarea', err);
+        // console.error('Error actualizando tarea', err);
         alert('No se pudo actualizar la tarea. Inténtalo de nuevo.');
         this.saving = false;
       }

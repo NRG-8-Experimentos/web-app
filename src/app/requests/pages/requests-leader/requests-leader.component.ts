@@ -18,9 +18,9 @@ export class RequestsLeaderComponent {
   private getData() {
     this.requestApiService.getLeaderRequests().subscribe((response: Array<Request>) => {
       this.requests = response.filter(request => request.requestStatus === 'PENDING');
-      console.log('Requests fetched successfully:', this.requests);
+      // console.log('Requests fetched successfully:', this.requests);
     }, error => {
-      console.error('There was an error fetching requests!', error);
+      // console.error('There was an error fetching requests!', error);
     });
   }
 
