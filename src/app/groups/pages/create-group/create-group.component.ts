@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {CreateGroupRequest} from '@app/groups/model/requests/create-group.request';
 import {LeaderGroupService} from '@app/groups/services/leader-group.service';
 import {Router} from '@angular/router';
+
+function imageUrlValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+  const pattern = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg)$/i;
+  return pattern.test(value) ? null : { invalidImageUrl: true };
+}
 
 @Component({
   selector: 'app-create-group',
@@ -45,9 +52,14 @@ import {Router} from '@angular/router';
             <mat-label>Url de la imagen de grupo</mat-label>
             <mat-icon matPrefix style="color: #888;">link</mat-icon>
             <input matInput formControlName="imgUrl" placeholder="Url Imagen Grupo" type="text" required>
-            @if (createGroupForm.get('imgUrl')?.hasError){
+            @if (createGroupForm.get('imgUrl')?.hasError('required')){
               <mat-error >
                 El url de la imagen es <strong>requerida</strong>
+              </mat-error>
+            }
+            @if (createGroupForm.get('imgUrl')?.hasError('invalidImageUrl')){
+              <mat-error>
+                El url debe ser una imagen válida (.jpg, .jpeg, .png, .gif, .webp, .svg)
               </mat-error>
             }
           </mat-form-field>
@@ -72,7 +84,7 @@ export class CreateGroupComponent {
     this.createGroupForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      imgUrl: ['', Validators.required]
+      imgUrl: ['', [Validators.required, imageUrlValidator]]
     });
   }
 
