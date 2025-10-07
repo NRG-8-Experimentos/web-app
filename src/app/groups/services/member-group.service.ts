@@ -10,11 +10,11 @@ import {MemberGroup} from '@app/groups/model/member-group.entity';
 export class MemberGroupService extends BaseApiService<Group> {
   constructor() {
     super();
-    this.resourceEndPoint = '/groups/members'; // plural según API
+    this.resourceEndPoint = ''; // plural según API
   }
 
   getMemberGroup(): Observable<MemberGroup> {
-    return this.http.get<MemberGroup>(`${this.resourcePath()}`, this.httpOptions).pipe(
+    return this.http.get<MemberGroup>(`${this.resourcePath()}/member/group`, this.httpOptions).pipe(
       retry(2),
       catchError(this.handleError)
     );

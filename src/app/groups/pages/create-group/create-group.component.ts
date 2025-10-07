@@ -84,7 +84,7 @@ export class CreateGroupComponent {
     const imgUrl = this.createGroupForm.value.imgUrl ?? '';
 
 
-    this.leaderGroupService.createGroup(new CreateGroupRequest(name, description, imgUrl)).subscribe({
+    this.leaderGroupService.createGroup(new CreateGroupRequest(name, imgUrl, description)).subscribe({
       next: () => {
         this.router.navigate(['leaders/group']).then();
       },
