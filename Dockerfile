@@ -12,4 +12,4 @@ FROM nginx:stable-alpine-slim AS final
 EXPOSE 80
 # Copy custom Nginx config and built app
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /src/dist/web-app/browser /usr/share/nginx/html
+COPY --from=build /src/dist/web-exp/browser /usr/share/nginx/html
